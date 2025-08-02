@@ -4990,8 +4990,8 @@ input:checked + .slider:before {
     <div id="preset-actions-modal" class="modal">
         <div id="custom-modal" style="width: 250px;">
             <div class="custom-modal-footer">
-                <button id="preset-action-edit">编辑预设</button>
-                <button id="preset-action-delete" class="btn-danger">删除预设</button>
+                <button id="preset-action-edit">編輯預設</button>
+                <button id="preset-action-delete" class="btn-danger">刪除預設</button>
                 <button id="preset-action-cancel" style="margin-top: 8px; border-radius: 8px; background-color: #f0f0f0;">取消</button>
             </div>
         </div>
@@ -4999,18 +4999,18 @@ input:checked + .slider:before {
 
     <div id="transfer-modal">
         <div class="transfer-content">
-            <div class="transfer-header">给Ta一个惊喜！</div>
+            <div class="transfer-header">給Ta一個驚喜！</div>
             <div class="transfer-input-group">
-                <label for="transfer-amount">转账金额</label>
+                <label for="transfer-amount">轉帳金額</label>
                 <input type="number" id="transfer-amount" placeholder="0.00" min="0" max="9999" step="0.01">
             </div>
             <div class="transfer-input-group">
-                <label for="transfer-note">备注 (可选)</label>
+                <label for="transfer-note">備註 (可選)</label>
                 <input type="text" id="transfer-note" placeholder="留下你的小心思~" maxlength="20">
             </div>
             <div class="transfer-actions">
                 <button id="transfer-cancel-btn">取消</button>
-                <button id="transfer-confirm-btn">确认转账</button>
+                <button id="transfer-confirm-btn">確認轉帳</button>
             </div>
         </div>
     </div>
@@ -5033,7 +5033,7 @@ input:checked + .slider:before {
         <div class="modal-body">
             <!-- 公开文字输入区 -->
             <div class="form-group">
-                <textarea id="post-public-text" rows="3" placeholder="分享新鲜事...（非必填的公开文字）"></textarea>
+                <textarea id="post-public-text" rows="3" placeholder="分享新鮮事...（非必填的公開文字）"></textarea>
             </div>
 
             <!-- === 模式切换开关 (新增) === -->
@@ -5060,7 +5060,7 @@ input:checked + .slider:before {
             <div id="image-mode-content" class="post-mode-content active">
                 <div class="form-group">
 <div id="post-image-preview-container" class="post-image-preview-container">
-                        <img id="post-image-preview" src="" alt="图片预览">
+                        <img id="post-image-preview" src="" alt="圖片預覽">
                         <button id="post-remove-image-btn">×</button>
                     </div>
                     <div class="post-image-upload-options">
@@ -7067,7 +7067,7 @@ async function openWorldBookEditor(bookId) {
     showScreen('world-book-editor-screen');
 }
 
-        function renderStickerPanel() { const grid = document.getElementById('sticker-grid'); grid.innerHTML = ''; if (state.userStickers.length === 0) { grid.innerHTML = '<p style="text-align:center; color: var(--text-secondary); grid-column: 1 / -1;">大人请点击右上角“添加”或“上传”来添加你的第一个表情吧！</p>'; return; } state.userStickers.forEach(sticker => { const item = document.createElement('div'); item.className = 'sticker-item'; item.style.backgroundImage = `url(${sticker.url})`; item.title = sticker.name; item.addEventListener('click', () => sendSticker(sticker)); addLongPressListener(item, () => { if (isSelectionMode) return; const existingDeleteBtn = item.querySelector('.delete-btn'); if (existingDeleteBtn) return; const deleteBtn = document.createElement('div'); deleteBtn.className = 'delete-btn'; deleteBtn.innerHTML = '&times;'; deleteBtn.onclick = async (e) => { e.stopPropagation(); const confirmed = await showCustomConfirm('删除表情', `確定要删除表情 "${sticker.name}" 吗？`, { confirmButtonClass: 'btn-danger' }); if (confirmed) { await db.userStickers.delete(sticker.id); state.userStickers = state.userStickers.filter(s => s.id !== sticker.id); renderStickerPanel(); } }; item.appendChild(deleteBtn); deleteBtn.style.display = 'block'; setTimeout(() => item.addEventListener('mouseleave', () => deleteBtn.remove(), { once: true }), 3000); }); grid.appendChild(item); }); }
+        function renderStickerPanel() { const grid = document.getElementById('sticker-grid'); grid.innerHTML = ''; if (state.userStickers.length === 0) { grid.innerHTML = '<p style="text-align:center; color: var(--text-secondary); grid-column: 1 / -1;">大人請點擊右上角「新增」或「上傳」來添加你的第一個表情吧！</p>'; return; } state.userStickers.forEach(sticker => { const item = document.createElement('div'); item.className = 'sticker-item'; item.style.backgroundImage = `url(${sticker.url})`; item.title = sticker.name; item.addEventListener('click', () => sendSticker(sticker)); addLongPressListener(item, () => { if (isSelectionMode) return; const existingDeleteBtn = item.querySelector('.delete-btn'); if (existingDeleteBtn) return; const deleteBtn = document.createElement('div'); deleteBtn.className = 'delete-btn'; deleteBtn.innerHTML = '&times;'; deleteBtn.onclick = async (e) => { e.stopPropagation(); const confirmed = await showCustomConfirm('刪除表情', `確定要刪除表情 "${sticker.name}" 嗎？`, { confirmButtonClass: 'btn-danger' }); if (confirmed) { await db.userStickers.delete(sticker.id); state.userStickers = state.userStickers.filter(s => s.id !== sticker.id); renderStickerPanel(); } }; item.appendChild(deleteBtn); deleteBtn.style.display = 'block'; setTimeout(() => item.addEventListener('mouseleave', () => deleteBtn.remove(), { once: true }), 3000); }); grid.appendChild(item); }); }
 
 // ▼▼▼ 用这个【已更新】的版本替换旧的 createMessageElement 函数 ▼▼▼
 function createMessageElement(msg, chat) {
@@ -11743,7 +11743,7 @@ function addPollOptionInput() {
         if (container.children.length > 2) {
             wrapper.remove();
         } else {
-            alert('投票至少需要2个选项。');
+            alert('投票至少需要2個選項。');
         }
     });
     
@@ -12467,7 +12467,7 @@ async function showCallTranscript(recordId) {
     bodyEl.innerHTML = '';
     
     if (!record.transcript || record.transcript.length === 0) {
-        bodyEl.innerHTML = '<p style="text-align:center; color: #8a8a8a;">这次通话没有留下文字记录。</p>';
+        bodyEl.innerHTML = '<p style="text-align:center; color: #8a8a8a;">這次通話沒有留下文字記錄。</p>';
     } else {
         record.transcript.forEach(entry => {
             const bubble = document.createElement('div');
@@ -12487,8 +12487,8 @@ async function showCallTranscript(recordId) {
     // 为新的、干净的按钮绑定事件
     newDeleteBtn.addEventListener('click', async () => {
         const confirmed = await showCustomConfirm(
-            "确认删除",
-            "確定要永久删除这条通话记录吗？此操作不可恢复。",
+            "確認刪除",
+            "確定要永久刪除這條通話記錄嗎？此操作不可恢復。",
             { confirmButtonClass: 'btn-danger' }
         );
 
@@ -12503,7 +12503,7 @@ async function showCallTranscript(recordId) {
             await renderCallHistoryScreen();
             
             // 4. (可选) 给出成功提示
-            alert('通话记录已删除。');
+            alert('通話記錄已刪除。');
         }
     });
     modal.classList.add('visible');
@@ -12525,15 +12525,15 @@ async function handleEditStatusClick() {
 
     // 2. 弹出输入框，让用户输入新的状态，并将当前状态作为默认值
     const newStatusText = await showCustomPrompt(
-        '编辑对方状态',
-        '请输入对方现在的新状态：',
+        '編輯對方狀態',
+        '請輸入對方現在的新狀態：',
         chat.status.text // 将当前状态作为输入框的默认内容
     );
 
     // 3. 如果用户输入了内容并点击了“確定”
     if (newStatusText !== null) {
         // 4. 更新内存和数据库中的状态数据
-        chat.status.text = newStatusText.trim() || '在线'; // 如果用户清空了，就默认为“在线”
+        chat.status.text = newStatusText.trim() || '在線'; // 如果用户清空了，就默认为“在线”
         chat.status.isBusy = false; // 每次手动编辑都默认其不处于“忙碌”状态
         chat.status.lastUpdate = Date.now();
         await db.chats.put(chat);
@@ -12543,11 +12543,11 @@ async function handleEditStatusClick() {
         renderChatList();
         
         // 6. 给出一个无伤大雅的成功提示
-        await showCustomAlert('状态已更新', `“${chat.name}”的当前状态已更新为：${chat.status.text}`);
+        await showCustomAlert('狀態已更新', `“${chat.name}”的當前狀態已更新為：${chat.status.text}`);
     }
 }
 
-// 放在你的JS功能函数定义区
+// 放在你的JS功能函數定義區
 async function openShareTargetPicker() {
     const modal = document.getElementById('share-target-modal');
     const listEl = document.getElementById('share-target-list');
@@ -12610,7 +12610,7 @@ function renderLyrics() {
     const lyricsList = document.getElementById('music-lyrics-list');
     lyricsList.innerHTML = '';
     if (!musicState.parsedLyrics || musicState.parsedLyrics.length === 0) {
-        lyricsList.innerHTML = '<div class="lyric-line">♪ 暂无歌词 ♪</div>';
+        lyricsList.innerHTML = '<div class="lyric-line">♪ 暫無歌詞 ♪</div>';
         return;
     }
     musicState.parsedLyrics.forEach((line, index) => {
@@ -12693,7 +12693,7 @@ async function handleRecallClick() {
     // 检查是否超过了撤回时限
     if (now - messageTime > RECALL_TIME_LIMIT_MS) {
         hideMessageActions();
-        await showCustomAlert('操作失败', '该消息發送已超过2分钟，无法撤回。');
+        await showCustomAlert('操作失敗', '該消息發送已超過2分鐘，無法撤回。');
         return;
     }
     
@@ -12726,7 +12726,7 @@ async function recallMessage(timestamp, isUserRecall) {
     };
     
     messageToRecall.type = 'recalled_message';
-    messageToRecall.content = isUserRecall ? '你撤回了一条消息' : '对方撤回了一条消息';
+    messageToRecall.content = isUserRecall ? '你撤回了一條訊息' : '對方撤回了一條訊息';
     messageToRecall.recalledData = recalledData;
     // 清理掉不再需要的旧属性
     delete messageToRecall.meaning;
@@ -12736,7 +12736,7 @@ async function recallMessage(timestamp, isUserRecall) {
     if (isUserRecall) {
         const hiddenMessageForAI = {
             role: 'system',
-            content: `[系统提示：用户撤回了一条消息。你不知道内容是什么，只需知道这个事件即可。]`,
+            content: `[系統提示：用戶撤回了一條消息。你不知道內容是什麼，只需知道這個事件即可。]`,
             timestamp: Date.now(),
             isHidden: true
         };
@@ -12788,12 +12788,12 @@ async function addNewCategory() {
     const input = document.getElementById('new-category-name-input');
     const name = input.value.trim();
     if (!name) {
-        alert('分类名不能为空！');
+        alert('分類名不能為空！');
         return;
     }
     const existing = await db.worldBookCategories.where('name').equals(name).first();
     if (existing) {
-        alert(`分类 "${name}" 已经存在了！`);
+        alert(`分類 "${name}" 已經存在了！`);
         return;
     }
     await db.worldBookCategories.add({ name });
@@ -12807,8 +12807,8 @@ async function addNewCategory() {
  */
 async function deleteCategory(categoryId) {
     const confirmed = await showCustomConfirm(
-        '确认删除', 
-        '删除分类后，该分类下的所有世界書将变为“未分类”。確定要删除吗？', 
+        '確認刪除', 
+        '刪除分類後，該分類下的所有世界書將變為“未分類”。確定要刪除嗎？', 
         { confirmButtonClass: 'btn-danger' }
     );
     if (confirmed) {
@@ -12909,13 +12909,13 @@ const newChat = {
                             applicationReason: ''
                         },
                         status: {
-                            text: '在线',
+                            text: '在線',
                             lastUpdate: Date.now(),
                             isBusy: false 
                         },
     settings: { 
-        aiPersona: '你是谁呀。', 
-        myPersona: '我是谁呀。', 
+        aiPersona: '你是誰呀。', 
+        myPersona: '我是誰呀。', 
         maxMemory: 10, 
         aiAvatar: defaultAvatar, 
         myAvatar: defaultAvatar, 
