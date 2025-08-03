@@ -1,89 +1,57 @@
-import { planPushJSON } from './llm_vendor.js';
-
-export class BackgroundAgent {
-  constructor({ db, getSettings, ui }) {
-    this.db = db;
-    this.getSettings = getSettings;
-    this.ui = ui;
-    this.timer = null;
-    this.lock = false;
-    this.abort = new AbortController();
-    this.lastActAt = 0;
-    this._gate = 0;
-  }
-
-  start() {
-    if (this.timer) return;
-    this.timer = setInterval(() => this.tick(), 1000); // 每秒判斷一次
-    if (this.ui?.setAgentStatus) {
-      this.ui.setAgentStatus('running');
+// js/agent.js —— 不要有 import
+(function (w) {
+  class BackgroundAgent {
+    constructor({ db, getSettings, ui }) {
+      this.db = db; this.getSettings = getSettings; this.ui = ui || {};
+      this.timer = null; this.lock = false; this.abort = new AbortController();
+      this.lastActAt = 0; this.gateAt = 0;
     }
-  }
+    start(){ if (this.timer) return; this.timer = setInterval(()=>this.tick(), 1000); this.ui.setAgentStatus?.('running'); }
+    stop(){ if (this.timer) clearInterval(this.timer); this.timer=null; this.abort.abort(); this.abort=new AbortController(); this.ui.setAgentStatus?.('stopped'); }
 
-  stop() {
-    if (this.timer) clearInterval(this.timer);
-    this.timer = null;
-    this.abort.abort();
-    this.abort = new AbortController();
-    if (this.ui?.setAgentStatus) {
-      this.ui.setAgentStatus('stopped');
-    }
-  }
+    async tick(){
+      if (document.hidden || this.lock) return;
+      const s = await this.getSettings();
+      if (!s?.bgEnabled || !s?.apiKey || !s?.model) return;
+      const intervalSec = Number(s.intervalSec ?? 60);
+      if (Date.now() - this.gateAt < intervalSec*1000) return;
 
-  async tick() {
-    if (document.hidden || this.lock) return;
-    const s = await this.getSettings();
-    if (!s || !s.bgEnabled || !s.apiKey || !s.model) return;
+      const cooldownSec = s.cooldownMinutes!=null ? Number(s.cooldownMinutes)*60 : Number(s.cooldownHours||0)*3600;
+      if (cooldownSec>0 && (Date.now()-this.lastActAt) < cooldownSec*1000) { this.gateAt = Date.now(); return; }
 
-    // 計算冷靜期秒數
-    const cooldownSec = s.cooldownMinutes ? s.cooldownMinutes * 60 : (s.cooldownHours || 0) * 3600;
-    if (cooldownSec > 0 && Date.now() - this.lastActAt < cooldownSec * 1000) {
-      return;
-    }
-
-    // 每 intervalSec 秒才真正跑一次
-    const intervalSec = s.intervalSec ?? 60;
-    if (!this._gate) this._gate = Date.now();
-    if (Date.now() - this._gate < intervalSec * 1000) {
-      return;
-    }
-    this._gate = Date.now();
-
-    this.lock = true;
-    try {
-      const context = await this.buildContext();
-      const plan = await planPushJSON({ settings: s, context, signal: this.abort.signal });
-      if (plan?.action === 'post' && plan.text?.trim()) {
-        const msg = plan.text.trim();
-        await this.db.messages.add({
-          id: crypto.randomUUID(),
-          ts: Date.now(),
-          from: 'M',
-          to: 'Anni',
-          direction: 'in',
-          text: msg
-        });
-        if (this.ui?.renderIncoming) {
-          this.ui.renderIncoming(msg);
+      this.lock = true;
+      try{
+        const context = await this.buildContext();
+        const plan = await w.LLM.planPushJSON({ settings:s, context, signal:this.abort.signal });
+        if (plan?.action==='post' && plan.text?.trim()){
+          const text = plan.text.trim();
+          await this._writeIncoming(text);
+          this.ui.renderIncoming?.(text);
+          this.lastActAt = Date.now();
+          this.ui.setAgentStatus?.('running');
+        } else {
+          await this._log({ level:'info', msg:'plan:none' });
         }
-        this.lastActAt = Date.now();
-        if (this.ui?.setAgentStatus) {
-          this.ui.setAgentStatus('running');
-        }
+      }catch(e){
+        await this._log({ level:'error', msg:String(e) });
+        this.ui.setAgentStatus?.('error');
+      }finally{
+        this.gateAt = Date.now();
+        this.lock = false;
       }
-    } catch (e) {
-      await this.db.agent_logs.add({ ts: Date.now(), level: 'error', msg: String(e) });
-      if (this.ui?.setAgentStatus) {
-        this.ui.setAgentStatus('error');
-      }
-    } finally {
-      this.lock = false;
     }
-  }
 
-  async buildContext() {
-    // 從 Dexie 拿最近 N 則對話/動態，轉成短摘要給模型
-    // 這裡維持你現有的取數函式，避免重寫。
-    return {};
+    async buildContext(){
+      try{
+        const msgs = await this.db?.messages?.orderBy('ts').reverse().limit(12).toArray() ?? [];
+        return { recent: msgs.map(m => ({ dir:m.direction, text:m.text, ts:m.ts })) };
+      }catch{ return { recent: [] }; }
+    }
+    async _writeIncoming(text){
+      const row = { id: crypto.randomUUID(), ts: Date.now(), from:'M', to:'Anni', direction:'in', text };
+      if (this.db?.messages) await this.db.messages.add(row);
+    }
+    async _log(entry){ try{ await this.db?.agent_logs?.add({ ts:Date.now(), ...entry }); }catch{} }
   }
-}
+  w.BackgroundAgent = BackgroundAgent;
+})(window);
