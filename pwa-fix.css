@@ -1,0 +1,6 @@
+/* iPhone PWA fix */
+@media (display-mode: standalone){
+  html,body{height:100%}
+  input,textarea{-webkit-user-select:text;user-select:text}
+  .chat img{max-height:50svh;max-width:240px;object-fit:contain}
+}
