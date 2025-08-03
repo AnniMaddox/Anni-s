@@ -310,6 +310,8 @@ const DEFAULT_APP_ICONS = {
                 modalConfirmBtn.onclick = () => { resolve(true); hideCustomModal(); };
                 modalCancelBtn.onclick = () => { resolve(false); hideCustomModal(); };
                 showCustomModal();
+
+
             });
         }
 
@@ -392,6 +394,34 @@ db.version(23).stores({
     memories: '++id, chatId, timestamp, type, targetDate' ,
     callRecords: '++id, chatId, timestamp, customName' // <--【核心修改】在这里加上 customName
 });
+
+
+// 23 版本保持不動
+db.version(24).stores({
+  // 把 23 版裡既有的所有表完整「複製」過來（不要漏）
+  chats:       '&id, isGroup, groupId',
+  apiConfig:   '&id',
+  globalSettings: '&id',
+  userStickers: '&id, url, name',
+  worldBooks:   '&id, name, categoryId',
+  worldBookCategories: '++id, name',
+  musicLibrary: '&id, name',
+  personaPresets: '&id',
+  qzoneSettings: '&id',
+  qzonePosts:    '&id, timestamp',
+  qzoneAlbums:   '++id, name, createdAt',
+  qzonePhotos:   '++id, albumId',
+  favorites:     '++id, type, timestamp, originalTimestamp',
+  qzoneGroups:   '++id, name',
+  memories:      '++id, chatId, timestamp, type, targetDate',
+  callRecords:   '++id, chatId, timestamp, customName',
+
+  // === 新增的三張表（只推不發用） ===
+  settings:     '++id, bgEnabled, intervalSec, cooldownHours, cooldownMinutes, proxyUrl, apiKey, model',
+  agent_logs:   '++id, ts, level, msg, plan',
+  messages:     'id, ts, from, to, direction, text' // 供代理寫入 M→Anni 訊息
+});
+
 
         // ===================================================================
         // 3. 所有功能函数定义
@@ -9790,6 +9820,94 @@ document.getElementById('existing-categories-list').addEventListener('click', (e
         }
 
         init();
+        // === 在 DOMContentLoaded 內、UI 建好之後貼入 ===
+
+// 取得 UI 元件（請確保對應 id 存在）
+const enableInput   = document.getElementById('bg-enable');         // 啟用後台：checkbox（原作者開關）
+const intervalInput = document.getElementById('bg-interval-sec');   // 偵測間隔：number（秒）
+const coolHrInput   = document.getElementById('bg-cooldown-hr');    // 冷靜期（小時）原欄位
+const coolMinInput  = document.getElementById('bg-cooldown-min');   // 冷靜期（分鐘）<- 你新增
+const indicator     = document.getElementById('bg-agent-indicator');// 狀態燈：span
+
+// 讀設定：優先 Dexie，其次直接從表單取值
+async function getCurrentSettings() {
+  const s = (db.settings && await db.settings.toCollection().first()) || {};
+  // 表單 → 設到 s（沿用你現有「反代/金鑰/模型」欄位的 id）
+  s.proxyUrl = s.proxyUrl ?? document.querySelector('#proxy-url')?.value ?? '';
+  s.apiKey   = s.apiKey   ?? document.querySelector('#api-key')?.value ?? '';
+  s.model    = s.model    ?? document.querySelector('#model-select')?.value ?? '';
+
+  // 代理參數預設
+  if (s.intervalSec == null) s.intervalSec = Number(intervalInput?.value || 60);
+  if (s.cooldownMinutes == null && s.cooldownHours == null) {
+    s.cooldownMinutes = Number(coolMinInput?.value || 2);
+  }
+  if (s.bgEnabled == null) s.bgEnabled = !!enableInput?.checked;
+  return s;
+}
+
+// 寫回（把 UI 改動存到 settings 表；若你已有專用 save 設定函式，也可換掉這段）
+async function saveSettingsPatch() {
+  if (!db.settings) return;
+  const cur = await db.settings.toCollection().first();
+  const row = cur || {};
+  row.bgEnabled       = !!enableInput?.checked;
+  row.intervalSec     = Number(intervalInput?.value || 60);
+  row.cooldownMinutes = Number(coolMinInput?.value || 2);
+  row.cooldownHours   = Number(coolHrInput?.value || 0);
+  if (cur?.id) await db.settings.update(cur.id, row);
+  else         await db.settings.add(row);
+}
+
+// 分鐘/小時雙向同步
+function syncCooldown(from) {
+  if (!coolMinInput || !coolHrInput) return;
+  if (from === 'min') {
+    coolHrInput.value = (Number(coolMinInput.value || 0) / 60).toFixed(3);
+  } else {
+    coolMinInput.value = Math.round(Number(coolHrInput.value || 0) * 60);
+  }
+}
+coolMinInput?.addEventListener('input', () => { syncCooldown('min'); saveSettingsPatch(); });
+coolHrInput ?.addEventListener('input', () => { syncCooldown('hr');  saveSettingsPatch(); });
+
+// 建立並綁定 BackgroundAgent
+const agent = new window.BackgroundAgent({
+  db,
+  getSettings: getCurrentSettings,
+  ui: {
+    renderIncoming: (text) => {
+      if (window.renderIncoming) return window.renderIncoming(text);
+      // 沒有現成渲染就簡單 append（可改成你的列表容器）
+      const box = document.querySelector('#message-list') || document.body;
+      const li = document.createElement('div');
+      li.textContent = `M：${text}`;
+      box.appendChild(li);
+    },
+    setAgentStatus: (s) => { if (indicator) indicator.textContent = s; }
+  }
+});
+
+// 開關與間隔的事件
+enableInput ?.addEventListener('change', async () => {
+  await saveSettingsPatch();
+  enableInput.checked ? agent.start() : agent.stop();
+});
+intervalInput?.addEventListener('change', saveSettingsPatch);
+
+// 首次載入：把預設值帶進 UI 並視需要啟動
+(async () => {
+  const s = await getCurrentSettings();
+  if (intervalInput) intervalInput.value = s.intervalSec ?? 60;
+  if (coolMinInput)  coolMinInput.value  = (s.cooldownMinutes != null)
+    ? s.cooldownMinutes : Math.round((s.cooldownHours || 0) * 60);
+  if (coolHrInput)   coolHrInput.value   = (s.cooldownHours != null)
+    ? s.cooldownHours : ((s.cooldownMinutes || 0) / 60);
+  syncCooldown('min');
+  if (enableInput)   enableInput.checked = !!s.bgEnabled;
+  if (s.bgEnabled) agent.start();
+})();
+
     });
 
 /* iPhone PWA fix */
