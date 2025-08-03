@@ -396,30 +396,12 @@ db.version(23).stores({
 });
 
 
-// 23 版本保持不動
+// 原本的 23 版保持不動
 db.version(24).stores({
-  // 把 23 版裡既有的所有表完整「複製」過來（不要漏）
-  chats:       '&id, isGroup, groupId',
-  apiConfig:   '&id',
-  globalSettings: '&id',
-  userStickers: '&id, url, name',
-  worldBooks:   '&id, name, categoryId',
-  worldBookCategories: '++id, name',
-  musicLibrary: '&id, name',
-  personaPresets: '&id',
-  qzoneSettings: '&id',
-  qzonePosts:    '&id, timestamp',
-  qzoneAlbums:   '++id, name, createdAt',
-  qzonePhotos:   '++id, albumId',
-  favorites:     '++id, type, timestamp, originalTimestamp',
-  qzoneGroups:   '++id, name',
-  memories:      '++id, chatId, timestamp, type, targetDate',
-  callRecords:   '++id, chatId, timestamp, customName',
-
-  // === 新增的三張表（只推不發用） ===
-  settings:     '++id, bgEnabled, intervalSec, cooldownHours, cooldownMinutes, proxyUrl, apiKey, model',
-  agent_logs:   '++id, ts, level, msg, plan',
-  messages:     'id, ts, from, to, direction, text' // 供代理寫入 M→Anni 訊息
+  // 只列「新增加」的表；不要動既有表的定義
+  settings:   '++id, bgEnabled, intervalSec, cooldownHours, cooldownMinutes, proxyUrl, apiKey, model',
+  agent_logs: '++id, ts, level, msg, plan',
+  messages:   'id, ts, from, to, direction, text'
 });
 
 
