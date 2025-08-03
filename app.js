@@ -9791,3 +9791,56 @@ document.getElementById('existing-categories-list').addEventListener('click', (e
 
         init();
     });
+// iPhone PWA 首次無法輸入的通用修補
+document.addEventListener('DOMContentLoaded', () => {
+  const isiPhonePWA =
+    /iphone|ipod/i.test(navigator.userAgent) && !!window.navigator.standalone;
+  if (!isiPhonePWA) return;
+
+  // 取「第一個可輸入」的欄位：text/search/password/textarea 皆可
+  const inp = document.querySelector(
+    'input:not([type=button]):not([type=checkbox]):not([type=radio]), textarea'
+  );
+  if (!inp) return;
+
+  // 找一個可能是輸入列容器（若沒有就用 body）
+  const holder =
+    inp.closest('[style*="position:fixed"], .fixed, .footer, #input-bar') ||
+    document.body;
+
+  function lift() {
+    // 暫時脫離 fixed，iOS 這時才會乖乖彈鍵盤
+    holder.dataset._pos = getComputedStyle(holder).position;
+    holder.style.position = 'static';
+    setTimeout(() => {
+      // 確保在可視範圍，並把游標放到文字尾端
+      holder.scrollIntoView({ block: 'end' });
+      try {
+        const len = (inp.value || '').length;
+        inp.setSelectionRange?.(len, len);
+      } catch (_) {}
+    }, 0);
+  }
+
+  function reset() {
+    holder.style.position = holder.dataset._pos || '';
+  }
+
+  // 1) 聚焦時脫離 fixed；失焦還原
+  inp.addEventListener('focus', lift, { passive: true });
+  inp.addEventListener('blur', reset, { passive: true });
+
+  // 2) 首次點擊救援：如果第一次點了沒彈，立刻再 focus 一次
+  document.addEventListener(
+    'touchend',
+    () => setTimeout(() => inp.focus(), 0),
+    { once: true, passive: true }
+  );
+
+  // 3) 從背景回前景/初次顯示時再補一槍
+  window.addEventListener('pageshow', () =>
+    setTimeout(() => {
+      if (document.activeElement !== inp) inp.focus();
+    }, 0)
+  );
+});
