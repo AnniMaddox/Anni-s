@@ -4213,12 +4213,24 @@ input:checked + .slider:before {
 #world-book-checkboxes-container .wb-category-header:nth-of-type(6n+6) .arrow { color: #ffc107; } /* 黄色 */
 
 /* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
-
-/* iPhone PWA fix */
-@media (display-mode: standalone){
-  html,body{height:100%}
-  input,textarea{-webkit-user-select:text;user-select:text}
-  .chat img{max-height:50svh;max-width:240px;object-fit:contain}
+@media (display-mode: standalone) {
+  html, body { height: 100%; }
+  .chat img { max-height: 50svh; max-width: 240px; object-fit: contain; }
 }
+
+#action-sheet[hidden]{display:none}
+#action-sheet{position:fixed;inset:0;z-index:999}
+#action-sheet .sheet-mask{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+#action-sheet .sheet-panel{
+  position:absolute;left:0;right:0;bottom:0;background:#111;border-radius:16px 16px 0 0;
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom)); display:grid; gap:8px
+}
+.sheet-btn{
+  display:flex; gap:10px; align-items:center; border:0; border-radius:12px; padding:12px 14px;
+  background:#1b1b1b; color:#eee; font-size:16px;
+}
+.sheet-btn:active{background:#222}
+.sheet-ico{width:24px; text-align:center; opacity:.9}
+.sheet-cancel{background:#0f0f0f; border:1px solid #242424}
 
     
