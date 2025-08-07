@@ -1,0 +1,12 @@
+/* Tools drawer styles */
+#tools-drawer[hidden]{display:none}
+#tools-drawer{position:fixed;inset:0;z-index:999}
+#tools-drawer .drawer-mask{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .18s}
+#tools-drawer .drawer-panel{position:absolute;left:0;right:0;bottom:0;background:#f6f7f9;border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform .22s ease-out;padding:10px 12px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -8px 24px rgba(0,0,0,.15)}
+#tools-drawer.open .drawer-mask{opacity:1}
+#tools-drawer.open .drawer-panel{transform:translateY(0)}
+.drawer-header{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;margin-bottom:10px}
+.drawer-close,.drawer-emoji{width:32px;height:32px;border-radius:16px;border:1px solid #e5e7eb;background:#fff}
+.drawer-body{display:flex;flex-wrap:wrap;gap:10px 12px}
+/* Hide the original tool strip globally */
+#tool-strip{display:none!important}
