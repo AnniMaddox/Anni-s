@@ -44,32 +44,49 @@
 
     // Assemble or find tool strip
     let strip = document.getElementById('tool-strip');
-    if (!strip) {
-      // 收集工具列裡的所有按鈕（排除＋、表情、發送）
-      const candidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
-        .filter(el => !['open-sticker-panel-btn','drawer-toggle-btn','send-btn'].includes(el.id));
-      if (candidates.length) {
+    /**
+     * 將工具按鈕搬移到抽屜
+     */
+    const moveToolsIntoDrawer = () => {
+      // 取得 actionsTop 內的所有候選工具按鈕（排除 + 號、笑臉開關與 send）
+      const candidates = Array.from(actionsTop.querySelectorAll('button,a,[role="button"]')).filter(
+        el => !['open-sticker-panel-btn', 'drawer-toggle-btn', 'send-btn'].includes(el.id)
+      );
+      if (!candidates.length) return;
+      // 一旦找到候選按鈕就停止掃描
+      if (scanTimer) {
+        clearInterval(scanTimer);
+        scanTimer = null;
+      }
+      // 如果 strip 尚未存在，建立一個並指定 id
+      if (!strip) {
         strip = document.createElement('div');
         strip.id = 'tool-strip';
-        candidates.forEach(el => strip.appendChild(el));
-        actionsTop.appendChild(strip);
-        bodyBox.appendChild(strip);
-      } else {
-        // 如果還沒有工具按鈕（可能尚未渲染），透過 MutationObserver 等待按鈕出現
-        const observer = new MutationObserver(() => {
-          const laterCandidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
-            .filter(el => !['open-sticker-panel-btn','drawer-toggle-btn','send-btn'].includes(el.id));
-          if (laterCandidates.length) {
-            observer.disconnect();
-            // 執行 init 再次搬移
-            init();
-          }
-        });
-        observer.observe(actionsTop, { childList: true });
-        return;
       }
-    } else {
+      // 將候選按鈕全部搬入 strip
+      candidates.forEach(el => strip.appendChild(el));
+      // 把 strip 放入抽屜內部
       bodyBox.appendChild(strip);
+      // 為 strip 上的工具添加點擊事件，點擊後稍後關閉抽屜
+      strip.addEventListener('click', e => {
+        const btn = e.target.closest('button,a,[role="button"]');
+        if (!btn) return;
+        setTimeout(closeDrawer, 100);
+      });
+    };
+    // 如果初始沒有 strip 或沒有按鈕，定時掃描等待工具按鈕載入
+    let scanTimer = null;
+    if (!strip) {
+      scanTimer = setInterval(moveToolsIntoDrawer, 300);
+    } else {
+      // 若 strip 已存在於 DOM，直接放入抽屜
+      bodyBox.appendChild(strip);
+      // 確保點擊 strip 會關閉抽屜
+      strip.addEventListener('click', e => {
+        const btn = e.target.closest('button,a,[role="button"]');
+        if (!btn) return;
+        setTimeout(closeDrawer, 100);
+      });
     }
 
     const openDrawer = () => {
