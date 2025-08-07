@@ -47,17 +47,19 @@
     if (!strip) {
       // 收集工具列裡的所有按鈕（排除＋、表情、發送）
       const candidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
-        // 排除原本的表情按鈕、抽屜開關和發送按鈕
         .filter(el => !['open-sticker-panel-btn','drawer-toggle-btn','send-btn'].includes(el.id));
       if (candidates.length) {
         strip = document.createElement('div');
         strip.id = 'tool-strip';
         candidates.forEach(el => strip.appendChild(el));
-        // 在原本容器裡插入 strip，待會再移到抽屜
         actionsTop.appendChild(strip);
+        bodyBox.appendChild(strip);
+      } else {
+        // 如果還沒有工具按鈕（可能尚未渲染），稍後再試一次
+        setTimeout(init, 200);
+        return;
       }
-    }
-    if (strip) {
+    } else {
       bodyBox.appendChild(strip);
     }
 
@@ -101,9 +103,6 @@
       });
     }
   };
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // 等待所有資源載入完成後再初始化，以確保工具列已渲染
+  window.addEventListener('load', init);
 })();
