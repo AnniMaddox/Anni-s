@@ -7,28 +7,20 @@
     const input = document.getElementById('chat-input');
     if (!area || !actionsTop) return;
 
-    // Create + button if missing
-    let plusBtn = document.getElementById('plus-btn');
-    if (!plusBtn) {
-      // 使用第一個工具按鈕的 class 作為樣式
-      const sample = actionsTop.querySelector('button');
-      plusBtn = document.createElement('button');
-      plusBtn.id = 'plus-btn';
-      plusBtn.className = sample ? sample.className : '';
-      plusBtn.textContent = '+';
-      plusBtn.setAttribute('aria-label', '+');
-      // 插入工具列最前面
-      actionsTop.insertBefore(plusBtn, actionsTop.firstChild);
+    // Create drawer toggle button (smiley) if missing
+    let toggleBtn = document.getElementById('drawer-toggle-btn');
+    if (!toggleBtn) {
+      const sampleBtn = actionsTop.querySelector('button');
+      toggleBtn = document.createElement('button');
+      toggleBtn.id = 'drawer-toggle-btn';
+      toggleBtn.className = sampleBtn ? sampleBtn.className : '';
+      toggleBtn.textContent = '😊';
+      toggleBtn.setAttribute('aria-label', '更多工具');
+      // 將開關插入工具列的最前面
+      actionsTop.insertBefore(toggleBtn, actionsTop.firstChild);
     }
 
-    // Rename sticker button to emoji-btn
-    const stickerBtn = document.getElementById('open-sticker-panel-btn');
-    if (stickerBtn) {
-      stickerBtn.id = 'emoji-btn';
-      stickerBtn.setAttribute('aria-label', '表情');
-      // 將按鈕顯示為笑臉表情
-      stickerBtn.textContent = '😊';
-    }
+    // 不變更原本的 open-sticker-panel-btn （+號）
 
     // Set up drawer container
     let drawer = document.getElementById('tools-drawer');
@@ -55,7 +47,8 @@
     if (!strip) {
       // 收集工具列裡的所有按鈕（排除＋、表情、發送）
       const candidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
-        .filter(el => !['plus-btn','emoji-btn','send-btn'].includes(el.id));
+        // 排除原本的表情按鈕、抽屜開關和發送按鈕
+        .filter(el => !['open-sticker-panel-btn','drawer-toggle-btn','send-btn'].includes(el.id));
       if (candidates.length) {
         strip = document.createElement('div');
         strip.id = 'tool-strip';
@@ -82,7 +75,8 @@
       }, 200);
     };
 
-    plusBtn.addEventListener('click', () => {
+    // 當點擊新建的笑臉按鈕時切換抽屜
+    toggleBtn.addEventListener('click', () => {
       if (drawer.hidden) openDrawer(); else closeDrawer();
     });
     drawer.addEventListener('click', e => {
