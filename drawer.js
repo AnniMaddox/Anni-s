@@ -55,8 +55,17 @@
         actionsTop.appendChild(strip);
         bodyBox.appendChild(strip);
       } else {
-        // 如果還沒有工具按鈕（可能尚未渲染），稍後再試一次
-        setTimeout(init, 200);
+        // 如果還沒有工具按鈕（可能尚未渲染），透過 MutationObserver 等待按鈕出現
+        const observer = new MutationObserver(() => {
+          const laterCandidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
+            .filter(el => !['open-sticker-panel-btn','drawer-toggle-btn','send-btn'].includes(el.id));
+          if (laterCandidates.length) {
+            observer.disconnect();
+            // 執行 init 再次搬移
+            init();
+          }
+        });
+        observer.observe(actionsTop, { childList: true });
         return;
       }
     } else {
