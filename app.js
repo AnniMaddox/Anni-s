@@ -9850,43 +9850,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sheet = document.getElementById('action-sheet');
   if (!plusBtn || !sheet) return;
 
-  // 這裡列出你要的所有功能（順序可改、可增刪）
-  const ACTIONS = [
-    { key:'photo',  text:'拍照',   icon:'📷', run: () => window.handleTakePhoto?.() },
-    { key:'album',  text:'相簿',   icon:'🖼', run: () => window.handlePickImage?.() },
-    { key:'voice',  text:'語音',   icon:'🎤', run: () => window.handleVoice?.() },
-    { key:'file',   text:'檔案',   icon:'📎', run: () => window.handlePickFile?.() },
-    { key:'link',   text:'貼連結', icon:'🔗', run: () => window.handleInsertLink?.() },
-    // 你的「第五項」放這裡（或改名）
-    { key:'extra',  text:'第5項',  icon:'✨', run: () => window.handleExtra?.() },
-  ];
-
-  // 動態渲染按鈕
-  const panel = sheet.querySelector('.sheet-panel');
-  panel.innerHTML = ACTIONS.map(a => `
-    <button class="sheet-btn" data-key="${a.key}" role="menuitem">
-      <span class="sheet-ico">${a.icon}</span><span>${a.text}</span>
-    </button>`).join('') + `
-    <button class="sheet-btn sheet-cancel" data-key="__cancel">取消</button>`;
-
-  const open  = () => { sheet.hidden = false; document.body.classList.add('sheet-open'); };
-  const close = () => { sheet.hidden = true;  document.body.classList.remove('sheet-open'); };
-
-  plusBtn.addEventListener('click', open);
-  sheet.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-key]');
-    if (!btn) return;
-    const key = btn.dataset.key;
-    if (key === '__cancel') return close();
-    (ACTIONS.find(x => x.key === key)?.run)?.();
-    close();
-  });
-  sheet.querySelector('.sheet-mask').addEventListener('click', close);
-
-  // 可選：長按 + 直接開相機
-  let t; plusBtn.addEventListener('pointerdown', () => { t=setTimeout(()=>ACTIONS[0].run?.(),500); });
-  ['pointerup','pointerleave','pointercancel'].forEach(ev=>plusBtn.addEventListener(ev,()=>clearTimeout(t)));
-})();
 
 
 /* ── tools drawer ─────────────────────────────────────── */
@@ -9896,7 +9859,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('chat-input');
   if (!area || !plus) return;
 
-  /* 建 drawer 容器（若 HTML 已手動加就會抓到） */
+  // 建抽屜容器（HTML 沒寫就動態生）
   let drawer = document.getElementById('tools-drawer');
   if (!drawer){
     drawer = document.createElement('div');
@@ -9914,33 +9877,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const body = drawer.querySelector('#drawer-body');
 
-  /* 找到 / 組裝原工具列 */
+  // 把原工具列搬進抽屜
   let strip = document.getElementById('tool-strip');
   if (!strip){
     strip = document.createElement('div'); strip.id = 'tool-strip';
     [...area.querySelectorAll('button,a,[role="button"]')]
-      .filter(el => !['plus-btn','emoji-btn','send-btn'].includes(el.id))
-      .forEach(el => strip.appendChild(el));
-    area.append(strip);                // 放回原處，CSS 會隱藏
+      .filter(el=>!['plus-btn','emoji-btn','send-btn'].includes(el.id))
+      .forEach(el=>strip.appendChild(el));
+    area.append(strip); // 臨時放回，CSS 會隱藏
   }
-  body.append(strip);                  // 移進抽屜
+  body.append(strip);
 
   const open  = () => { drawer.hidden=false; requestAnimationFrame(()=>drawer.classList.add('open'));
                         input?.blur(); document.body.style.overflow='hidden'; };
   const close = () => { drawer.classList.remove('open');
                         setTimeout(()=>{drawer.hidden=true;document.body.style.overflow='';},200); };
 
-  plus.addEventListener('click', () => drawer.hidden ? open() : close());
-  drawer.addEventListener('click', e => { if (e.target.closest('[data-close]')) close(); });
-  document.addEventListener('keydown', e => { if (e.key==='Escape' && !drawer.hidden) close(); });
+  plus.addEventListener('click',()=>drawer.hidden?open():close());
+  drawer.addEventListener('click',e=>{ if(e.target.closest('[data-close]')) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!drawer.hidden) close(); });
 
-  /* 點工具後自動收回；若想保持開啟，把這段移除 */
-  strip.addEventListener('click', e => {
-    const btn = e.target.closest('button,a,[role="button"]'); if (btn) setTimeout(close,120);
+  // 點工具後 0.12s 收回
+  strip.addEventListener('click',e=>{
+    if(e.target.closest('button,a,[role="button"]')) setTimeout(close,120);
   });
 
-  /* 抽屜裡的表情鍵呼叫原表情面板（若有） */
   drawer.querySelector('#drawer-emoji-btn')
-        ?.addEventListener('click', () => window.handleEmojiPanel?.());
+        ?.addEventListener('click',()=>window.handleEmojiPanel?.());
 })();
-
