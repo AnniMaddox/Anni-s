@@ -9888,3 +9888,59 @@ document.addEventListener('DOMContentLoaded', () => {
   ['pointerup','pointerleave','pointercancel'].forEach(ev=>plusBtn.addEventListener(ev,()=>clearTimeout(t)));
 })();
 
+
+/* ── tools drawer ─────────────────────────────────────── */
+(() => {
+  const area  = document.getElementById('chat-input-area');
+  const plus  = document.getElementById('plus-btn');
+  const input = document.getElementById('chat-input');
+  if (!area || !plus) return;
+
+  /* 建 drawer 容器（若 HTML 已手動加就會抓到） */
+  let drawer = document.getElementById('tools-drawer');
+  if (!drawer){
+    drawer = document.createElement('div');
+    drawer.id = 'tools-drawer'; drawer.hidden = true;
+    drawer.innerHTML = `
+      <div class="drawer-mask" data-close></div>
+      <div class="drawer-panel" role="dialog">
+        <div class="drawer-header">
+          <button class="drawer-close" data-close aria-label="關閉">✕</button>
+          <button class="drawer-emoji" id="drawer-emoji-btn" aria-label="表情">😊</button>
+        </div>
+        <div class="drawer-body" id="drawer-body"></div>
+      </div>`;
+    area.after(drawer);
+  }
+  const body = drawer.querySelector('#drawer-body');
+
+  /* 找到 / 組裝原工具列 */
+  let strip = document.getElementById('tool-strip');
+  if (!strip){
+    strip = document.createElement('div'); strip.id = 'tool-strip';
+    [...area.querySelectorAll('button,a,[role="button"]')]
+      .filter(el => !['plus-btn','emoji-btn','send-btn'].includes(el.id))
+      .forEach(el => strip.appendChild(el));
+    area.append(strip);                // 放回原處，CSS 會隱藏
+  }
+  body.append(strip);                  // 移進抽屜
+
+  const open  = () => { drawer.hidden=false; requestAnimationFrame(()=>drawer.classList.add('open'));
+                        input?.blur(); document.body.style.overflow='hidden'; };
+  const close = () => { drawer.classList.remove('open');
+                        setTimeout(()=>{drawer.hidden=true;document.body.style.overflow='';},200); };
+
+  plus.addEventListener('click', () => drawer.hidden ? open() : close());
+  drawer.addEventListener('click', e => { if (e.target.closest('[data-close]')) close(); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape' && !drawer.hidden) close(); });
+
+  /* 點工具後自動收回；若想保持開啟，把這段移除 */
+  strip.addEventListener('click', e => {
+    const btn = e.target.closest('button,a,[role="button"]'); if (btn) setTimeout(close,120);
+  });
+
+  /* 抽屜裡的表情鍵呼叫原表情面板（若有） */
+  drawer.querySelector('#drawer-emoji-btn')
+        ?.addEventListener('click', () => window.handleEmojiPanel?.());
+})();
+
