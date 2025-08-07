@@ -1,20 +1,24 @@
 // Tools drawer functionality
 (() => {
   const init = () => {
+    // 主輸入區與工具區容器
     const area  = document.getElementById('chat-input-area');
+    const actionsTop = document.getElementById('chat-input-actions-top');
     const input = document.getElementById('chat-input');
-    if (!area) return;
+    if (!area || !actionsTop) return;
 
     // Create + button if missing
     let plusBtn = document.getElementById('plus-btn');
     if (!plusBtn) {
-      const sample = area.querySelector('button');
+      // 使用第一個工具按鈕的 class 作為樣式
+      const sample = actionsTop.querySelector('button');
       plusBtn = document.createElement('button');
       plusBtn.id = 'plus-btn';
-      if (sample) plusBtn.className = sample.className;
+      plusBtn.className = sample ? sample.className : '';
       plusBtn.textContent = '+';
       plusBtn.setAttribute('aria-label', '+');
-      area.insertBefore(plusBtn, area.firstChild);
+      // 插入工具列最前面
+      actionsTop.insertBefore(plusBtn, actionsTop.firstChild);
     }
 
     // Rename sticker button to emoji-btn
@@ -22,9 +26,8 @@
     if (stickerBtn) {
       stickerBtn.id = 'emoji-btn';
       stickerBtn.setAttribute('aria-label', '表情');
-      if (stickerBtn.childNodes.length === 1 && stickerBtn.childNodes[0].nodeType === 3) {
-        stickerBtn.textContent = '😊';
-      }
+      // 將按鈕顯示為笑臉表情
+      stickerBtn.textContent = '😊';
     }
 
     // Set up drawer container
@@ -42,6 +45,7 @@
           </div>
           <div class="drawer-body" id="drawer-body"></div>
         </div>`;
+      // 將抽屜放在輸入區之後
       area.insertAdjacentElement('afterend', drawer);
     }
     const bodyBox = drawer.querySelector('#drawer-body');
@@ -49,13 +53,15 @@
     // Assemble or find tool strip
     let strip = document.getElementById('tool-strip');
     if (!strip) {
-      const candidates = [...area.querySelectorAll('button,a,[role="button"]')]
+      // 收集工具列裡的所有按鈕（排除＋、表情、發送）
+      const candidates = [...actionsTop.querySelectorAll('button,a,[role="button"]')]
         .filter(el => !['plus-btn','emoji-btn','send-btn'].includes(el.id));
       if (candidates.length) {
         strip = document.createElement('div');
         strip.id = 'tool-strip';
         candidates.forEach(el => strip.appendChild(el));
-        area.appendChild(strip);
+        // 在原本容器裡插入 strip，待會再移到抽屜
+        actionsTop.appendChild(strip);
       }
     }
     if (strip) {
