@@ -70,7 +70,7 @@ body {
 
         .header .action-btn img { height: 26px; }
         .header .save-btn { font-size: 16px; color: var(--accent-color); font-weight: 600; cursor: pointer; }
-        #home-screen { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 20px; padding-top: 80px; padding-bottom: 50px; box-sizing: border-box; background-size: cover; background-position: center; }
+        #home-screen { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 20px; padding-top: 80px; padding-bottom: calc(140px + env(safe-area-inset-bottom)); box-sizing: border-box; background-size: cover; background-position: center; }
         #clock-container { text-align: center; color: white; text-shadow: 0 3px 8px rgba(0,0,0,0.4); margin-bottom: 20px; flex-shrink: 0; }
         #main-time { font-size: 80px; font-weight: 200; }
         #main-date { font-size: 18px; font-weight: 500; }
@@ -4226,7 +4226,157 @@ input:checked + .slider:before {
 
 /* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
 
+        /* iOS Dock + icon sizing on home-screen */
+        #home-screen .app-icon .icon-bg { width: 60px; height: 60px; border-radius: 14px; }
+        #home-dock { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom)); width: min(380px, calc(100% - 28px)); height: 86px; background: rgba(255,255,255,0.28); border-radius: 26px; box-shadow: 0 12px 28px rgba(0,0,0,.22); backdrop-filter: saturate(160%) blur(20px); -webkit-backdrop-filter: saturate(160%) blur(20px); display: flex; align-items: center; justify-content: space-around; padding: 0 14px; z-index: 20; }
+        #home-dock .dock-icon { width: 60px; height: 60px; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.16); overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: var(--secondary-bg); position: relative; }
+        #home-dock .dock-icon img { width: 100%; height: 100%; object-fit: cover; }
+        #home-dock.edit .dock-icon { animation: dock-wobble .25s ease-in-out infinite alternate; cursor: move; }
+        #home-dock .dock-icon.drag-over { outline: 2px dashed rgba(0,0,0,0.3); }
+        #home-dock .dock-delete { display: none; position: absolute; left: -6px; top: -6px; width: 18px; height: 18px; border-radius: 50%; background: #ff3b30; color: #fff; font-weight: 700; font-size: 12px; line-height: 14px; text-align: center; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+        #home-dock.edit .dock-delete { display: block; }
+        @keyframes dock-wobble { 0% { transform: rotate(-2deg) } 100% { transform: rotate(2deg) } }
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { #home-dock { background: rgba(255,255,255,0.6); } }
+
+        /* iOS Settings screen (Traditional Chinese) */
+        #settings-screen { background: #f2f2f7; }
+        #settings-screen .content { padding: 16px; padding-top: calc(16px + env(safe-area-inset-top)); overflow-y: auto; flex: 1; }
+        .settings-search { background: #e5e5ea; border-radius: 12px; padding: 8px 12px; color: #6b7280; font-size: 14px; margin-bottom: 16px; }
+        .settings-profile { background: #fff; border-radius: 14px; box-shadow: 0 1px 0 rgba(0,0,0,.06); padding: 12px; display: flex; align-items: center; gap: 12px; }
+        .settings-profile .avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .settings-profile .name { font-weight: 800; color: #111827; }
+        .settings-section { background: #fff; border-radius: 14px; box-shadow: 0 1px 0 rgba(0,0,0,.06); margin-top: 16px; overflow: hidden; }
+        .settings-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+        .settings-item + .settings-item { border-top: 1px solid #efeff4; }
+        .settings-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 14px; }
+        .settings-title { flex: 1; color: #111827; font-weight: 600; }
+        .settings-chevron { color: #9ca3af; font-size: 18px; font-weight: 700; }
+
+        /* Memory Tree + Diary beautify */
+        #memory-tree-screen { background:#f7f7fb; }
+        #memory-tree-screen .content { padding:12px; overflow-y:auto; flex:1; }
+        .memory-section { background:#fff; border-radius:14px; box-shadow:0 1px 0 rgba(0,0,0,.06); margin-bottom:12px; overflow:hidden; }
+        .memory-section .sec-header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; font-weight:800; cursor:pointer; }
+        .memory-section .sec-body { display:flex; flex-direction:column; gap:10px; padding:10px 12px; }
+        .memory-item { background:#fafafa; border:1px solid #eee; border-radius:10px; padding:10px; display:flex; align-items:flex-start; gap:8px; }
+        .memory-item .text { flex:1; color:#111827; }
+        .memory-item .ops { display:flex; gap:8px; }
+        .memory-item select { padding:6px 8px; border:1px solid #ddd; border-radius:8px; }
+        .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:700; }
+
+        /* Diary cards beautify with role color */
+        #diary-list { display:flex; flex-direction:column; gap:12px; padding:12px; }
+        .diary-card { background:#fff; border-radius:14px; border-left:6px solid #999; box-shadow: 0 4px 14px rgba(0,0,0,.06); padding:12px 14px; }
+        .diary-card .meta { display:flex; align-items:center; justify-content:space-between; color:#6b7280; font-size:12px; }
+        .diary-card .title { font-weight:700; margin-top:4px; }
+        .diary-card .content { margin-top:8px; white-space:pre-wrap; line-height:1.6; }
+        .role-tag { padding:2px 8px; border-radius:999px; font-size:12px; color:#fff; font-weight:800; }
+
+        /* Home grid rebuild + edit */
+        #home-screen.home-edit .app-icon .icon-bg { animation: dock-wobble .25s ease-in-out infinite alternate; }
+        #home-screen .app-icon[draggable="true"] { cursor: move; }
+        #home-drop-zone { position: absolute; inset: 0 0 110px 0; border: 2px dashed transparent; pointer-events: none; }
+        #home-screen.home-edit #home-drop-zone { pointer-events: auto; }
+        #home-drop-zone.drag-over { border-color: rgba(255,255,255,0.5); }
+
+        /* Roles + Diary basic style */
+        #roles-screen .role-card, #diary-screen .diary-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 0 rgba(0,0,0,.06); padding: 12px; }
+        #roles-screen .role-list, #diary-screen .diary-list { display: flex; flex-direction: column; gap: 12px; padding: 12px; overflow-y: auto; }
+        #roles-screen .role-meta { font-size: 12px; color: #6b7280; }
+        #diary-filter { display: flex; gap: 10px; padding: 12px; align-items: center; }
+        #diary-filter select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+
+        /* Shade (pull-down) minimal styles */
+        #ios-shade-hotzone{ position:absolute; top:0; left:0; right:0; height:28px; z-index:1000; }
+        #ios-shade{ position:absolute; inset:0; z-index:1001; pointer-events:none; }
+        #ios-shade .shade-backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.35); opacity:0; transition: opacity .18s ease; }
+        #ios-shade.open{ pointer-events:auto; }
+        #ios-shade.open .shade-backdrop{ opacity:1; }
+        #ios-shade .shade-panel{ position:absolute; left:0; right:0; height: calc(100% - env(safe-area-inset-top)); top:0; transform: translateY(calc(-100% + var(--pull, 0px))); transition: transform .18s ease; background: rgba(250,250,252,.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .shade-grabber{ width:64px; height:5px; border-radius:4px; background: rgba(0,0,0,.2); margin:12px auto 8px; }
+        .shade-clock{ text-align:center; padding:6px 16px 0; }
+        .shade-time{ font-size:60px; font-weight:200; line-height:1; }
+        .shade-date{ font-size:13px; color: rgba(60,60,67,.7); }
+        .shade-widgets{ display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px; }
+        .shade-widget{ background: rgba(255,255,255,.9); border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:10px; }
     </style>
+
+<!-- HOTFIX: message-actions modal click-through & stacking context -->
+<style id="hotfix-0914-modal-zindex">
+/* Put message/post actions above any custom overlay/photo viewer */
+#message-actions-modal,
+#post-actions-modal {
+  position: fixed; /* detach from any transformed ancestors */
+  z-index: 2002 !important;
+}
+#message-actions-modal .modal-content,
+#post-actions-modal .modal-content,
+#message-actions-modal .custom-modal-footer button,
+#post-actions-modal .custom-modal-footer button {
+  pointer-events: auto;
+}
+/* Keep the generic custom overlay under the actions menu */
+#custom-modal-overlay { z-index: 1000 !important; }
+/* iOS/WebKit sometimes eats clicks if modal has transform/opacity transition.
+   Ensure the interactive box always receives events. */
+#message-actions-modal .modal-content,
+#post-actions-modal .modal-content {
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+</style>
+
+<style>
+
+/* === 功能面板（模仿 LINE 底部抽屜） === */
+#tools-panel { 
+    position: absolute; 
+    left:0; right:0; bottom:0;
+    width:100%;
+    background: rgba(242,242,247,0.92);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-color);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 18px rgba(0,0,0,.08);
+    transform: translateY(100%);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    visibility: hidden;
+    z-index: 220; /* 高於輸入區、低於貼圖面板 */
+}
+#tools-panel.visible { transform: translateY(0); visibility: visible; }
+#tools-panel .tools-panel-header{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 12px 18px; border-bottom:1px solid var(--border-color);
+    font-size: 15px; color: var(--text-secondary);
+}
+#tools-panel .tools-panel-header .title{ 
+    font-weight: 600; color: var(--text-primary);
+}
+#tools-panel .tools-panel-header span{ cursor:pointer; color: var(--accent-color); }
+#tools-panel .tools-grid{
+    display:grid; grid-template-columns: repeat(4,1fr);
+    gap: 20px 8px; padding: 16px;
+}
+#tools-panel .tool-item{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    background: none; border:none; cursor:pointer;
+}
+#tools-panel .tool-item:active{ transform: scale(.96); }
+#tools-panel .tool-item .icon{
+    width:58px; height:58px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    background: white; border:1px solid rgba(0,0,0,.06);
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    font-size: 28px;
+}
+#tools-panel .tool-item .label{
+    font-size: 12px; color: var(--text-secondary);
+}
+/* 讓輸入區不被抽屜覆蓋時有安全距 */
+#chat-input-area{ padding-bottom: env(safe-area-inset-bottom); }
+
+</style>
 </head>
 <body>
         <div id="phone-screen">
@@ -4284,7 +4434,7 @@ input:checked + .slider:before {
           
 <div id="world-book-screen" class="screen">
     <div class="header">
-        <span class="back-btn" onclick="showScreen('home-screen')">‹</span>
+        <span class="back-btn" onclick="goBack()">‹</span>
         <span>世界書</span>
         <div class="header-actions"> <!-- 【推荐】用一个容器把按钮包起来 -->
             <span class="action-btn" id="manage-world-book-categories-btn">管理分類</span>
@@ -4292,6 +4442,91 @@ input:checked + .slider:before {
         </div>
     </div>
     <div id="world-book-list"></div>
+</div>
+<!-- Roles (對面角色) -->
+<div id="roles-screen" class="screen">
+  <div class="header">
+    <span class="back-btn" onclick="showScreen('home-screen')">‹</span>
+    <span>角色</span>
+    <div class="header-actions">
+      <span class="action-btn" id="add-role-btn" onclick="openRoleEditor()">+</span>
+    </div>
+  </div>
+  <div class="role-list" id="roles-list"></div>
+</div>
+
+<!-- Memory Tree Screen -->
+<div id="memory-tree-screen" class="screen">
+  <div class="header">
+    <span class="back-btn" onclick="showScreen('roles-screen')">‹</span>
+    <span id="memory-tree-title">記憶樹</span>
+    <span style="width:30px;"></span>
+  </div>
+  <div class="content" id="memory-tree-content"></div>
+</div>
+
+<!-- Diary (日記) -->
+<div id="diary-screen" class="screen">
+  <div class="header">
+    <span class="back-btn" onclick="showScreen('home-screen')">‹</span>
+    <span>日記</span>
+    <div class="header-actions">
+      <span class="action-btn" id="add-diary-btn">+</span>
+    </div>
+  </div>
+  <div id="diary-filter">
+    <label>角色</label>
+    <select id="diary-role-select"></select>
+  </div>
+  <div class="diary-list" id="diary-list"></div>
+</div>
+
+<!-- 角色編輯 -->
+<div id="role-editor-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header"><span id="role-editor-title">編輯角色</span></div>
+    <div class="modal-body">
+      <div class="form-group"><label for="role-name-input">名稱</label><input id="role-name-input" type="text" placeholder="角色名稱"></div>
+      <div class="form-group"><label>頭像</label>
+        <div class="avatar-upload">
+          <img id="role-avatar-preview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;background:#eee;">
+          <button id="role-avatar-upload-btn" type="button">上傳頭像</button>
+          <input id="role-avatar-file" type="file" accept="image/*" style="display:none;">
+        </div>
+      </div>
+      <div class="form-group"><label for="role-personality-input">性格</label><textarea id="role-personality-input" rows="3" placeholder="例：溫柔、體貼、行動導向…"></textarea></div>
+      <div class="form-group"><label for="role-tone-input">語氣</label><textarea id="role-tone-input" rows="2" placeholder="例：使用可愛Emoji、結尾加呢/呀…"></textarea></div>
+      <div class="form-group"><label for="role-bio-input">個人資料</label><textarea id="role-bio-input" rows="3" placeholder="年齡、職業、興趣與背景"></textarea></div>
+      <div class="form-group"><label for="role-system-input">系統提示</label><textarea id="role-system-input" rows="4" placeholder="高優先級規則與口吻（對AI）」></textarea></div>
+      <div class="form-group"><label for="role-taboos-input">禁忌/避免事項</label><textarea id="role-taboos-input" rows="3" placeholder="不應觸及或避免的內容"></textarea></div>
+      <div class="form-group"><label for="role-tags-input">標籤（逗號分隔）</label><input id="role-tags-input" type="text" placeholder="例：重要,感情"></div>
+    </div>
+    <div class="modal-footer"><button class="cancel" id="cancel-role-btn">取消</button><button class="save" id="save-role-btn">儲存</button></div>
+  </div>
+  </div>
+
+<!-- Profile (個人資料設定) -->
+<div id="profile-screen" class="screen">
+  <div class="header">
+    <span class="back-btn" onclick="showScreen('settings-screen')">‹</span>
+    <span>個人資料</span>
+    <span style="width:30px;"></span>
+  </div>
+  <div class="form-container">
+    <div class="form-group">
+      <label for="profile-nickname">暱稱</label>
+      <input id="profile-nickname" type="text" placeholder="輸入暱稱">
+    </div>
+    <div class="form-group">
+      <label>頭像</label>
+      <div class="avatar-upload">
+        <img id="profile-avatar-preview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;background:#eee;">
+        <button id="profile-avatar-upload-btn">上傳頭像</button>
+        <input id="profile-avatar-file" type="file" accept="image/*" style="display:none;">
+      </div>
+    </div>
+    <button class="form-button" id="save-profile-btn">儲存</button>
+  </div>
 </div>
             <div id="world-book-editor-screen" class="screen">
                 <div class="header">
@@ -4321,7 +4556,7 @@ input:checked + .slider:before {
                 </div>
             </div>
 
-            <div id="api-settings-screen" class="screen"><div class="header"><span class="back-btn" onclick="showScreen('home-screen')">‹</span><span>API 設置</span><span style="width: 30px;"></span></div><div class="form-container"><p style="font-size: 14px; color: #666; background-color: #f0f0f0; padding: 10px; border-radius: 8px;">提示: 若要使用“發送圖片”功能, 請務必選擇支持Vision(視覺)的模型, 如<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4o</code>或<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4-vision-preview</code>。</p><div class="form-group"><label for="proxy-url">反代地址 (不需要添加/v1噢~)</label><input type="text" id="proxy-url" placeholder="例如: https://api.openai.com"></div><div class="form-group"><label for="api-key">密鑰 (直連輪詢用英文逗號隔開)</label><input type="password" id="api-key" placeholder="sk-..."></div><div class="form-group"><label for="model-select">模型</label><select id="model-select"></select></div><button class="form-button" id="fetch-models-btn">拉取模型</button>
+            <div id="api-settings-screen" class="screen"><div class="header"><span class="back-btn" onclick="goBack()">‹</span><span>API 設置</span><span style="width: 30px;"></span></div><div class="form-container"><p style="font-size: 14px; color: #666; background-color: #f0f0f0; padding: 10px; border-radius: 8px;">提示: 若要使用“發送圖片”功能, 請務必選擇支持Vision(視覺)的模型, 如<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4o</code>或<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4-vision-preview</code>。</p><div class="form-group"><label for="proxy-url">反代地址 (不需要添加/v1噢~)</label><input type="text" id="proxy-url" placeholder="例如: https://api.openai.com"></div><div class="form-group"><label for="api-key">密鑰 (直連輪詢用英文逗號隔開)</label><input type="password" id="api-key" placeholder="sk-..."></div><div class="form-group"><label for="model-select">模型</label><select id="model-select"></select></div><button class="form-button" id="fetch-models-btn">拉取模型</button>
 
 <!-- ▼▼▼ 将这段代码粘贴到 API 设置页面的“保存设置”按钮上方 ▼▼▼ -->
 <hr style="margin:20px 0; opacity:.3">
@@ -4587,27 +4822,8 @@ input:checked + .slider:before {
     <span id="cancel-reply-btn">×</span>
 </div>
         <div id="chat-input-actions-top">
-            <button id="open-sticker-panel-btn" class="chat-action-icon-btn action-button" title="表情面板">+</button>
-            <button id="send-photo-btn" class="chat-action-icon-btn action-button" title="發送照片"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
-            <button id="upload-image-btn" class="chat-action-icon-btn action-button" title="上传图片"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--text-primary);"><path d="M21 3.5H3C2.44772 3.5 2 3.94772 2 4.5V19.5C2 20.0523 2.44772 20.5 3 20.5H21C21.5523 20.5 22 20.0523 22 19.5V4.5C22 3.94772 21.5523 3.5 21 3.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 13.5C17.6046 13.5 18.5 12.6046 18.5 11.5C18.5 10.3954 17.6046 9.5 16.5 9.5C15.3954 9.5 14.5 10.3954 14.5 11.5C14.5 12.6046 15.3954 13.5 16.5 13.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 14.5L18 10.5L10.3333 18.5M12.5 16L9 12.5L2 19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button id="transfer-btn" class="chat-action-icon-btn action-button" title="转账">￥</button>
-            <button id="voice-message-btn" class="chat-action-icon-btn action-button" title="發送语音"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4"/><path d="M8 23h8"/></svg></button>
-<!-- ▼▼▼ 将这行新代码粘贴到“發送语音”按钮的后面 ▼▼▼ -->
-<button id="send-waimai-request-btn" class="chat-action-icon-btn action-button" title="发起外卖请求"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button>
-<!-- ▲▲▲ 新代码粘贴结束 ▲▲▲ -->
-<!-- ▼▼▼ 【新增】视频通话按钮 ▼▼▼ -->
-<button id="video-call-btn" class="chat-action-icon-btn action-button" title="视频通话"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></button>
-<!-- ▲▲▲ 新增结束 ▲▲▲
-<!-- ▼▼▼群视频通话按钮 ▼▼▼ -->
-<button id="group-video-call-btn" class="chat-action-icon-btn action-button" title="群视频通话"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></button>
-<!-- ▲▲▲ 全新添加结束 ▲▲▲ -->
-<!-- ▼▼▼发起投票按钮▼▼▼ -->
-<button id="send-poll-btn" class="chat-action-icon-btn action-button" title="发起投票"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h10"/><path d="M6 6h.01"/><path d="M8 12h10"/><path d="M6 12h.01"/><path d="M8 18h10"/><path d="M6 18h.01"/></svg></button>
-<!-- ▲▲▲ 替换结束 ▲▲▲ -->
-<!-- ▼▼▼ 在 id="chat-input-actions-top" 的末尾，【添加】这个新的按钮 ▼▼▼ -->
-<button id="share-link-btn" class="chat-action-icon-btn action-button" title="分享链接"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></button>
-<!-- ▲▲▲ 新增HTML结束 ▲▲▲ -->
-        </div>
+    <button id="open-tools-panel-btn" class="chat-action-icon-btn action-button" title="更多">+</button>
+</div>
         <div id="chat-input-main-row">
             <textarea id="chat-input" rows="1" placeholder="输入消息..."></textarea>
             <div id="input-actions-wrapper">
@@ -4637,6 +4853,50 @@ input:checked + .slider:before {
     </div>
     <input type="file" id="sticker-upload-input" accept="image/*" style="display: none;">
     <input type="file" id="image-upload-input" accept="image/*" style="display: none;">
+<!-- ▼▼▼ 功能面板（8個） ▼▼▼ -->
+<div id="tools-panel">
+    <div class="tools-panel-header">
+        <span id="close-tools-panel-btn">取消</span>
+        <span class="title">功能</span>
+        <span class="done" id="done-tools-panel-btn">完成</span>
+    </div>
+    <div class="tools-grid">
+        <button id="open-sticker-panel-btn" class="tool-item">
+            <div class="icon">😊</div>
+            <div class="label">送貼圖</div>
+        </button>
+        <button id="upload-image-btn" class="tool-item">
+            <div class="icon">🖼️</div>
+            <div class="label">上傳圖片</div>
+        </button>
+        <button id="send-photo-btn" class="tool-item">
+            <div class="icon">📷</div>
+            <div class="label">發送照片</div>
+        </button>
+        <button id="voice-message-btn" class="tool-item">
+            <div class="icon">🎙️</div>
+            <div class="label">語音訊息</div>
+        </button>
+        <button id="transfer-btn" class="tool-item">
+            <div class="icon">￥</div>
+            <div class="label">轉帳</div>
+        </button>
+        <button id="send-waimai-request-btn" class="tool-item">
+            <div class="icon">🍱</div>
+            <div class="label">外賣請求</div>
+        </button>
+        <button id="video-call-btn" class="tool-item">
+            <div class="icon">📹</div>
+            <div class="label">視訊通話</div>
+        </button>
+        <button id="group-video-call-btn" class="tool-item">
+            <div class="icon">👥</div>
+            <div class="label">群組視訊</div>
+        </button>
+    </div>
+</div>
+<!-- ▲▲▲ 功能面板結束 ▲▲▲ -->
+
     
     <!-- 音乐播放器 (保持不变) -->
 <div id="music-player-overlay">
@@ -4757,7 +5017,7 @@ input:checked + .slider:before {
 
 <div id="font-settings-screen" class="screen">
     <div class="header">
-        <span class="back-btn" onclick="showScreen('home-screen')">‹</span>
+        <span class="back-btn" onclick="goBack()">‹</span>
         <span>字體設置</span>
         <span style="width: 30px;"></span>
     </div>
@@ -5682,8 +5942,10 @@ if(Array.isArray(res) && res.length > 1) {
         // 1. 所有变量和常量定义
         // ===================================================================
         const db = new Dexie('GeminiChatDB');
+        window.db = db;
         // --- 已修正 ---
         let state = { chats: {}, activeChatId: null, globalSettings: {}, apiConfig: {}, userStickers: [], worldBooks: [], personaPresets: [], qzoneSettings: {}, activeAlbumId: null };
+        window.state = state;
         // --- 修正结束 ---
 let musicState = { 
     isActive: false, 
@@ -5862,6 +6124,38 @@ db.version(23).stores({
     callRecords: '++id, chatId, timestamp, customName' // <--【核心修改】在这里加上 customName
 });
 
+// Version 24: add roles, memory points, extend memories with roleId/tags/pinned
+db.version(24).stores({
+    chats: '&id, isGroup, groupId',
+    apiConfig: '&id',
+    globalSettings: '&id',
+    userStickers: '&id, url, name',
+    worldBooks: '&id, name, categoryId',
+    worldBookCategories: '++id, name',
+    musicLibrary: '&id',
+    personaPresets: '&id',
+    qzoneSettings: '&id',
+    qzonePosts: '++id, timestamp',
+    qzoneAlbums: '++id, name, createdAt',
+    qzonePhotos: '++id, albumId',
+    favorites: '++id, type, timestamp, originalTimestamp',
+    qzoneGroups: '++id, name',
+    // Extend memories index to include roleId and type
+    memories: '++id, roleId, chatId, timestamp, type, targetDate',
+    callRecords: '++id, chatId, timestamp, customName',
+    // New tables
+    roleProfiles: '&id, name, updatedAt',
+    roleAnchors: '++id, roleId, parentId',
+    memoryPoints: '++id, roleId, timestamp, refType, refId'
+}).upgrade(tx => {
+    // backfill new fields
+    return tx.table('memories').toCollection().modify(m => {
+        if (m.roleId === undefined) m.roleId = null;
+        if (m.tags === undefined) m.tags = [];
+        if (m.pinned === undefined) m.pinned = false;
+    });
+});
+
         // ===================================================================
         // 3. 所有功能函数定义
         // ===================================================================
@@ -5873,7 +6167,19 @@ db.version(23).stores({
          }
     }
 
-        function showScreen(screenId) {
+        // Navigation with simple stack to support back
+        window.navStack = window.navStack || [];
+        window.currentScreenId = window.currentScreenId || 'home-screen';
+        function showScreen(screenId, opts) {
+            const fromBack = !!(opts && opts.fromBack);
+            const prev = window.currentScreenId || (document.querySelector('.screen.active')?.id || 'home-screen');
+            if (!fromBack) {
+                if (screenId === 'home-screen') {
+                    window.navStack = [];
+                } else if (prev && prev !== screenId) {
+                    window.navStack.push(prev);
+                }
+            }
             if (screenId === 'chat-list-screen') {
                 window.renderChatListProxy(); 
                 switchToChatListView('messages-view');
@@ -5881,15 +6187,43 @@ db.version(23).stores({
             if (screenId === 'api-settings-screen') window.renderApiSettingsProxy();
             if (screenId === 'wallpaper-screen') window.renderWallpaperScreenProxy();
             if (screenId === 'world-book-screen') window.renderWorldBookScreenProxy();
+            if (screenId === 'profile-screen') renderProfileScreen();
+            if (screenId === 'roles-screen') renderRolesScreen();
+            if (screenId === 'diary-screen') { renderDiaryScreen(); setTimeout(() => { try{ decorateDiaryUI(); }catch(e){} }, 0); }
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const screenToShow = document.getElementById(screenId);
             if (screenToShow) screenToShow.classList.add('active');
-            if (screenId === 'chat-interface-screen') window.updateListenTogetherIconProxy(state.activeChatId);
+            window.currentScreenId = screenId;
+            if (screenId === 'chat-interface-screen') { 
+                window.updateListenTogetherIconProxy(state.activeChatId);
+                try { renderChatInterface(state.activeChatId); } catch(e) { try { if (window.renderChatInterface) window.renderChatInterface(state.activeChatId); } catch(_){} }
+            }
             if (screenId === 'font-settings-screen') {
-                document.getElementById('font-url-input').value = state.globalSettings.fontUrl || '';
+                const f = document.getElementById('font-url-input');
+                if (f) f.value = state.globalSettings.fontUrl || '';
                 applyCustomFont(state.globalSettings.fontUrl || '', true);
             }
+            // Sync theme toggle when entering appearance settings
+            if (screenId === 'wallpaper-screen') {
+                const sw = document.getElementById('theme-toggle-switch');
+                if (sw) sw.checked = !!state.globalSettings.darkMode;
+            }
+            // Update settings profile card if present
+            if (screenId === 'settings-screen') {
+                const prof = document.getElementById('settings-profile-card') || document.querySelector('#settings-screen .settings-profile');
+                if (prof) {
+                    const av = prof.querySelector('.avatar');
+                    const nm = prof.querySelector('.name');
+                    if (av) av.src = (state.qzoneSettings?.avatar) || av.src;
+                    if (nm) nm.textContent = (state.qzoneSettings?.nickname) || nm.textContent;
+                }
+            }
         }
+        window.goBack = function(){
+            const target = window.navStack && window.navStack.pop();
+            if (target) return showScreen(target, { fromBack: true });
+            return showScreen('home-screen', { fromBack: true });
+        };
         window.updateListenTogetherIconProxy = () => {};
 
         function switchToChatListView(viewId) {
@@ -6555,6 +6889,47 @@ state.globalSettings = globalSettings || {
 };
 // 【核心修改】合并已保存的图标和默认图标，防止更新后旧数据丢失新图标
 state.globalSettings.appIcons = { ...DEFAULT_APP_ICONS, ...(state.globalSettings.appIcons || {}) };
+
+    // Ensure darkMode flag exists and apply root class on load
+    if (typeof state.globalSettings.darkMode !== 'boolean') {
+        state.globalSettings.darkMode = false;
+    }
+    function applyDarkModeUI(){
+        const phone = document.getElementById('phone-screen');
+        if (phone) phone.classList.toggle('dark-mode', !!state.globalSettings.darkMode);
+        const tgl = document.getElementById('theme-toggle-switch');
+        if (tgl) tgl.checked = !!state.globalSettings.darkMode;
+        const ap = document.getElementById('appearance-value');
+        if (ap) ap.textContent = state.globalSettings.darkMode ? '深色' : '淺色';
+        try { localStorage.setItem('ephone-theme', state.globalSettings.darkMode ? 'dark' : 'light'); } catch(_){}
+    }
+    applyDarkModeUI();
+
+    // Bind theme toggle (if present) and Shade appearance quick toggle
+    document.addEventListener('change', async (e)=>{
+        const el = e.target;
+        if (el && el.id === 'theme-toggle-switch'){
+            state.globalSettings.darkMode = !!el.checked;
+            await db.globalSettings.put(state.globalSettings);
+            applyDarkModeUI();
+        }
+    }, true);
+    // Defer binding Shade widget if injected
+    setTimeout(()=>{
+        const appearanceValue = document.getElementById('appearance-value');
+        if (appearanceValue && !appearanceValue.dataset.bound){
+            appearanceValue.dataset.bound = '1';
+            const update = ()=>{ appearanceValue.textContent = state.globalSettings.darkMode ? '深色' : '淺色'; };
+            update();
+            const widget = appearanceValue.closest('.shade-widget') || appearanceValue;
+            widget.addEventListener('click', async ()=>{
+                state.globalSettings.darkMode = !state.globalSettings.darkMode;
+                await db.globalSettings.put(state.globalSettings);
+                applyDarkModeUI();
+                update();
+            });
+        }
+    }, 0);
 
     state.userStickers = userStickers || [];
     state.worldBooks = worldBooks || [];
@@ -8143,6 +8518,8 @@ if (visiblePosts.length > 0 && !chat.isGroup) {
             messagesPayload.push({ role: 'system', content: postsContext });
         }
             let  isGemini = proxyUrl === GEMINI_API_URL;
+            // Append role memory context (diary highlights + recent diary)
+            await appendMemoryContextForChat(chat, messagesPayload);
             let geminiConfig = toGeminiRequestData(model,apiKey,systemPrompt, messagesPayload,isGemini)
             const response = isGemini ? await fetch(geminiConfig.url, geminiConfig.data) :  await fetch(`${proxyUrl}/v1/chat/completions`, {
                 method: 'POST',
@@ -8891,6 +9268,7 @@ case 'send_and_recall': {
             }
         }
         renderChatList();
+        try { if (!chat.isGroup) { await maybeAutoDiary(chatId); } } catch(e) { console.warn('auto-diary error', e); }
     }
 }
 
@@ -9489,6 +9867,7 @@ try {
 
             // 發送请求
             let  isGemini = proxyUrl === GEMINI_API_URL;
+            await appendMemoryContextForChat(chat, messagesPayload);
             let geminiConfig = toGeminiRequestData(model,apiKey,systemPrompt, messagesPayload,isGemini)
             const response = isGemini ? await fetch(geminiConfig.url, geminiConfig.data) :  await fetch(`${proxyUrl}/v1/chat/completions`, {
                 method: 'POST',
@@ -9504,15 +9883,24 @@ try {
                 const errorData = await response.json();
                 throw new Error(`API請求失敗: ${response.status} - ${JSON.stringify(errorData)}`);
             }
+            
             const data = await response.json();
-            // 檢查是否有有效回覆
-            if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
+            // 兼容 GPT / Gemini 的回覆結構（避免空回被誤判）
+            let aiText = '';
+            if (isGemini) {
+                const topCand = data && data.candidates && data.candidates[0] ? data.candidates[0] : null;
+                if (topCand && topCand.content && Array.isArray(topCand.content.parts)) {
+                    aiText = topCand.content.parts.map(p => (p && p.text) ? p.text : '').join('').trim();
+                }
+            } else {
+                aiText = (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) ? data.choices[0].message.content : '';
+            }
+            if (!aiText) {
                 console.warn(`API為空回或格式不正確，角色 "${chat.name}" 的本次後台活動跳過。`);
                 return;
             }
-            const responseArray = parseAiResponse(isGemini? data.candidates[0].content.parts[0].text : data.choices[0].message.content);
-
-        // 後續處理AI返回指令的邏輯保持不變...
+            const responseArray = parseAiResponse(aiText);
+// 後續處理AI返回指令的邏輯保持不變...
         for (const action of responseArray) {
             if (!action) continue;
 
@@ -10964,6 +11352,7 @@ ${videoCallState.preCallContext}
     
         try {
             let  isGemini = proxyUrl === GEMINI_API_URL;
+            await appendMemoryContextForChat(chat, messagesForApi);
             let geminiConfig = toGeminiRequestData(model,apiKey,inCallPrompt, messagesForApi,isGemini)
             const response = isGemini ? await fetch(geminiConfig.url, geminiConfig.data) : await fetch(`${proxyUrl}/v1/chat/completions`, {
                 method: 'POST',
@@ -11144,7 +11533,9 @@ async function renderMemoriesScreen() {
     listEl.innerHTML = '';
     
     // 1. 获取所有回忆，并按目标日期（如果是约定）或创建日期（如果是回忆）降序排列
-    const allMemories = await db.memories.orderBy('timestamp').reverse().toArray();
+    let allMemories = await db.memories.orderBy('timestamp').reverse().toArray();
+    // Hide diary entries from Memories list; diaries live in Diary screen
+    allMemories = allMemories.filter(m => m && m.type !== 'diary');
     
     if (allMemories.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 50px 0;">這裡還沒有共同的回憶和約定呢~</p>';
@@ -11348,6 +11739,7 @@ ${contextSummary}
 
         try {
             let  isGemini = proxyUrl === GEMINI_API_URL;
+            await appendMemoryContextForChat(chat, messagesForApi);
             let geminiConfig = toGeminiRequestData(model,apiKey,systemPrompt, messagesForApi,isGemini)
             const response = isGemini ? await fetch(geminiConfig.url, geminiConfig.data) : await fetch(`${proxyUrl}/v1/chat/completions`, {
                 method: 'POST',
@@ -13160,6 +13552,26 @@ document.getElementById('chat-settings-btn').addEventListener('click', async () 
         removeBgBtn.style.display = 'none';
     }
 
+    // Role binding selector (only for single chat)
+    const modalBodyEl = document.querySelector('#chat-settings-modal .modal-body');
+    let roleGroup = document.getElementById('chat-role-group');
+    if (!roleGroup) {
+        roleGroup = document.createElement('div');
+        roleGroup.id = 'chat-role-group';
+        roleGroup.className = 'form-group';
+        roleGroup.innerHTML = '<label for="chat-role-select">綁定角色</label><select id="chat-role-select"></select>';
+        // 插入在 AI Persona 之上較合理
+        const anchor = document.getElementById('ai-persona-group') || modalBodyEl.firstChild;
+        modalBodyEl.insertBefore(roleGroup, anchor);
+    }
+    roleGroup.style.display = isGroup ? 'none' : 'block';
+    if (!isGroup) {
+        const sel = roleGroup.querySelector('#chat-role-select');
+        sel.innerHTML = '<option value="">未綁定</option>';
+        const roles = await db.roleProfiles.toArray();
+        roles.forEach(r => { const opt = document.createElement('option'); opt.value = r.id; opt.textContent = r.name; if (chat.settings.roleId === r.id) opt.selected = true; sel.appendChild(opt); });
+    }
+
     if (isGroup) {
         document.getElementById('my-group-nickname-input').value = chat.settings.myNickname || '';
         document.getElementById('group-avatar-preview').src = chat.settings.groupAvatar || defaultGroupAvatar;
@@ -13388,6 +13800,8 @@ const checkedBooks = document.querySelectorAll('#world-book-checkboxes-container
     }
 
     chat.settings.maxMemory = parseInt(document.getElementById('max-memory').value) || 10;
+    const roleSelEl = document.getElementById('chat-role-select');
+    if (roleSelEl && !chat.isGroup) chat.settings.roleId = roleSelEl.value || null;
     await db.chats.put(chat);
 
     applyScopedCss(chat.settings.customCss, '#chat-messages', 'custom-bubble-style');
@@ -15259,7 +15673,1229 @@ document.getElementById('existing-categories-list').addEventListener('click', (e
         }
 
         init();
+
+        // Helper: map app keys to titles/screens
+        const APP_REGISTRY = {
+            messages: { key: 'messages', title: '訊息', screen: 'chat-list-screen', emoji: '💬' },
+            diary:    { key: 'diary',    title: '日記', screen: 'diary-screen',      emoji: '📒' },
+            roles:    { key: 'roles',    title: '角色', screen: 'roles-screen',      emoji: '🎭' },
+            settings: { key: 'settings', title: '設定', screen: 'settings-screen',   emoji: '⚙️' },
+            worldbook:{ key: 'worldbook',title: '世界書', screen: 'world-book-screen', emoji: '📚' }
+        };
+
+        function rebuildHomeGrid() {
+            const grid = document.getElementById('app-grid');
+            if (!grid) return;
+            // Home grid only keeps World Book on top; others live in Dock
+            const order = ['worldbook'];
+            grid.innerHTML = '';
+            // 4 columns grid rendered as rows
+            let row = null;
+            order.forEach((k, i) => {
+                if (i % 4 === 0) {
+                    row = document.createElement('div');
+                    row.className = 'app-row';
+                    grid.appendChild(row);
+                }
+                const app = APP_REGISTRY[k];
+                const el = document.createElement('div');
+                el.className = 'app-icon home-app';
+                el.dataset.app = app.key;
+                el.innerHTML = `<div class="icon-bg" aria-hidden="true">${app.emoji}</div><div class="label">${app.title}</div>`;
+                el.addEventListener('click', () => showScreen(app.screen));
+                row.appendChild(el);
+            });
+        }
+
+        // Inject iOS-style Dock and enable edit interactions, with home↔dock drag
+        function injectHomeDock() {
+            const home = document.getElementById('home-screen');
+            if (!home || document.getElementById('home-dock')) return;
+
+            // 1) 初始化 Dock 狀態（持久化）
+            const DEFAULT_DOCK_ITEMS = [
+                { key: 'messages', title: '訊息', screen: 'chat-list-screen' },
+                { key: 'diary',    title: '日記', screen: 'diary-screen' },
+                { key: 'roles',    title: '角色', screen: 'roles-screen' },
+                { key: 'settings', title: '設定', screen: 'settings-screen' }
+            ];
+            if (!state.globalSettings.dockItems || !Array.isArray(state.globalSettings.dockItems)) {
+                state.globalSettings.dockItems = DEFAULT_DOCK_ITEMS;
+            }
+
+            // 2) 建立容器
+            const dock = document.createElement('div');
+            dock.id = 'home-dock';
+            dock.setAttribute('aria-label', 'Dock');
+            home.appendChild(dock);
+            if (!document.getElementById('home-drop-zone')){
+                const dz = document.createElement('div');
+                dz.id = 'home-drop-zone';
+                dz.setAttribute('aria-hidden','true');
+                home.appendChild(dz);
+            }
+
+            // Ensure home grid is rebuilt to the new layout
+            rebuildHomeGrid();
+
+            let dockEdit = false;
+            let dragFrom = null;
+
+            function saveDock() { return db.globalSettings.put(state.globalSettings); }
+
+            function renderDock() {
+                dock.innerHTML = '';
+                state.globalSettings.dockItems.forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'dock-icon';
+                    el.dataset.index = String(index);
+                    el.title = item.title;
+                    const emoji = (APP_REGISTRY[item.key]?.emoji) || '📱';
+                    el.innerHTML = `<div style="font-size:28px;">${emoji}</div><button class="dock-delete" title="移除">×</button>`;
+
+                    // 點擊啟動（非編輯模式）
+                    el.addEventListener('click', (e) => {
+                        if (dockEdit) return; // 編輯模式下不開啟
+                        showScreen(item.screen);
+                    });
+
+                    // 長按進入編輯
+                    let pressTimer = null;
+                    const startPress = () => { if (pressTimer) clearTimeout(pressTimer); pressTimer = setTimeout(() => enterEdit(), 500); };
+                    const cancelPress = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+                    el.addEventListener('mousedown', startPress);
+                    el.addEventListener('touchstart', startPress, { passive: true });
+                    ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => el.addEventListener(ev, cancelPress));
+
+                    // 刪除
+                    el.querySelector('.dock-delete').addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        if (!dockEdit) return;
+                        const idx = parseInt(el.dataset.index);
+                        state.globalSettings.dockItems.splice(idx, 1);
+                        await saveDock();
+                        renderDock();
+                    });
+
+                    // 以 pointer/touch 實作拖曳排序（避開 iOS DnD 相容性）
+                    let dragging = false; let startX = 0; let originIndex = index; let currentIndex = index;
+                    const onPointerMove = (e) => {
+                        if (!dragging) return;
+                        const x = e.clientX || (e.touches && e.touches[0]?.clientX) || 0;
+                        const dx = x - startX;
+                        el.style.transform = `translateX(${dx}px)`;
+                        const icons = [...dock.querySelectorAll('.dock-icon')];
+                        const centers = icons.map(i => i.getBoundingClientRect().left + i.getBoundingClientRect().width/2);
+                        let nearest = 0; let minD = Infinity;
+                        centers.forEach((cx, idx)=>{ const d = Math.abs((e.clientX||0) - cx); if (d<minD){ minD=d; nearest=idx; } });
+                        currentIndex = nearest;
+                    };
+                    const onPointerUp = async (e) => {
+                        if (!dragging) return;
+                        dragging = false; el.classList.remove('dragging'); el.style.transform = '';
+                        window.removeEventListener('pointermove', onPointerMove); window.removeEventListener('pointerup', onPointerUp);
+                        if (currentIndex !== originIndex) {
+                            const arr = state.globalSettings.dockItems; const [moved] = arr.splice(originIndex,1); arr.splice(currentIndex,0,moved);
+                            await saveDock(); renderDock();
+                        }
+                    };
+                    el.addEventListener('pointerdown', (e)=>{ if (!dockEdit) return; dragging=true; startX = e.clientX; originIndex = parseInt(el.dataset.index); currentIndex = originIndex; el.classList.add('dragging'); window.addEventListener('pointermove', onPointerMove); window.addEventListener('pointerup', onPointerUp); });
+
+                    dock.appendChild(el);
+                });
+
+                // Add + tile in edit mode
+                if (dockEdit) {
+                    const add = document.createElement('div');
+                    add.className = 'dock-icon';
+                    add.innerHTML = `<div style="font-size:28px;">＋</div>`;
+                    add.title = '加入 App';
+                    add.addEventListener('click', async () => {
+                        const all = ['messages','diary','roles','settings','worldbook'];
+                        const exists = new Set(state.globalSettings.dockItems.map(i => i.key));
+                        const selectable = all.filter(k => !exists.has(k));
+                        if (selectable.length === 0) { alert('Dock 已滿或沒有可加入的 App'); return; }
+                        const html = selectable.map(k => {
+                            const a = APP_REGISTRY[k];
+                            return `<label style="display:flex;align-items:center;gap:8px;margin:8px 0;"><input type=\"radio\" name=\"dock-add\" value=\"${a.key}\"> ${a.title}</label>`;
+                        }).join('');
+                        const val = await showCustomPrompt('加入 Dock', '選擇要加入的 App', '', 'text', html);
+                        const chosen = (document.querySelector('input[name="dock-add"]:checked')||{}).value;
+                        if (chosen) {
+                            const a = APP_REGISTRY[chosen];
+                            state.globalSettings.dockItems.push({ key: a.key, title: a.title, screen: a.screen });
+                            await saveDock();
+                            renderDock();
+                        }
+                    });
+                    dock.appendChild(add);
+                }
+                if (dockEdit) enableEditUI();
+            }
+
+            function enableEditUI() {
+                dock.classList.add('edit');
+                [...dock.querySelectorAll('.dock-icon')].forEach(el => el.setAttribute('draggable', 'true'));
+                // Home icons draggable toward dock
+                const homeScreen = document.getElementById('home-screen');
+                homeScreen.classList.add('home-edit');
+                document.querySelectorAll('#app-grid .home-app').forEach(el => {
+                    el.setAttribute('draggable', 'true');
+                    el.addEventListener('dragstart', (e) => {
+                        const key = el.dataset.app;
+                        e.dataTransfer.setData('text/app-key', key);
+                        e.dataTransfer.effectAllowed = 'copy';
+                    });
+                });
+                const dropZone = document.getElementById('home-drop-zone');
+                dropZone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropZone.classList.add('drag-over'); });
+                dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag-over'));
+                dropZone.addEventListener('drop', async (e)=>{
+                    e.preventDefault(); dropZone.classList.remove('drag-over');
+                    // remove from dock when dropping dock icon to home
+                    const idxStr = e.dataTransfer.getData('text/dock-index');
+                    if (idxStr !== '') {
+                        const idx = parseInt(idxStr);
+                        if (!isNaN(idx)) {
+                            state.globalSettings.dockItems.splice(idx,1);
+                            await saveDock();
+                            renderDock();
+                        }
+                    }
+                });
+            }
+            function disableEditUI() {
+                dock.classList.remove('edit');
+                [...dock.querySelectorAll('.dock-icon')].forEach(el => el.setAttribute('draggable', 'false'));
+                const homeScreen = document.getElementById('home-screen');
+                homeScreen.classList.remove('home-edit');
+                document.querySelectorAll('#app-grid .home-app').forEach(el => el.setAttribute('draggable', 'false'));
+            }
+            function enterEdit() { dockEdit = true; enableEditUI(); }
+            function exitEdit() { dockEdit = false; disableEditUI(); }
+
+            // 點擊 Dock 外即可離開編輯
+            home.addEventListener('click', (e) => {
+                if (!dockEdit) return;
+                const inside = e.composedPath ? e.composedPath().includes(dock) : dock.contains(e.target);
+                if (!inside) exitEdit();
+            });
+
+            // Accept drops from home icons into dock
+            dock.addEventListener('dragover', (e)=>{
+                if (!dockEdit) return; const key = e.dataTransfer.getData('text/app-key'); if (key) e.preventDefault();
+            });
+            dock.addEventListener('drop', async (e)=>{
+                if (!dockEdit) return; e.preventDefault();
+                const key = e.dataTransfer.getData('text/app-key');
+                if (key && !state.globalSettings.dockItems.some(i=>i.key===key)) {
+                    const a = APP_REGISTRY[key];
+                    if (a) {
+                        state.globalSettings.dockItems.push({ key: a.key, title: a.title, screen: a.screen });
+                        await saveDock();
+                        renderDock();
+                    }
+                }
+            });
+
+            renderDock();
+        }
+
+        // Inject 設定 screen + App Icon
+        function injectSettingsScreen() {
+            if (document.getElementById('settings-screen')) return;
+            const phone = document.getElementById('phone-screen');
+            const screen = document.createElement('div');
+            screen.id = 'settings-screen';
+            screen.className = 'screen';
+            screen.innerHTML = `
+                <div class="header">
+                    <span class="back-btn" onclick="showScreen('home-screen')">‹</span>
+                    <span>設定</span>
+                    <span style="width:30px;"></span>
+                </div>
+                <div class="content">
+                    <div class="settings-search">搜尋</div>
+                    <div class="settings-profile">
+                        <img class="avatar" src="https://i.postimg.cc/hPdpVBz0/IMG-1372.jpg" alt="avatar">
+                        <div>
+                            <div class="name">個人資料</div>
+                            <div style="color:#6b7280; font-size:12px;">你的個人資訊</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-item" data-target="api-settings-screen">
+                            <div class="settings-icon" style="background:#007aff">Wi</div>
+                            <div class="settings-title">API 設定</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                        <div class="settings-item" data-target="wallpaper-screen">
+                            <div class="settings-icon" style="background:#ffcc00">壁</div>
+                            <div class="settings-title">壁紙</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                        <div class="settings-item" data-target="font-settings-screen">
+                            <div class="settings-icon" style="background:#5856d6">字</div>
+                            <div class="settings-title">文字</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-item" data-target="_placeholder_sound">
+                            <div class="settings-icon" style="background:#ff9500">🔊</div>
+                            <div class="settings-title">聲音</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                        <div class="settings-item" data-target="_placeholder_data">
+                            <div class="settings-icon" style="background:#34c759">數</div>
+                            <div class="settings-title">資料設定</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                        <div class="settings-item" data-target="_placeholder_theme">
+                            <div class="settings-icon" style="background:#ff2d55">主</div>
+                            <div class="settings-title">主題</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                        <div class="settings-item" data-target="_placeholder_device">
+                            <div class="settings-icon" style="background:#5e5ce6">機</div>
+                            <div class="settings-title">手機外觀</div>
+                            <div class="settings-chevron">›</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-item">
+                            <div class="settings-icon" style="background:#0fb560">記</div>
+                            <div class="settings-title">自動日記</div>
+                            <div>
+                                <label style="display:inline-flex;align-items:center;gap:6px;">
+                                    <input id="toggle-auto-diary" type="checkbox">
+                                    開啟
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-icon" style="background:#2d7cff">重</div>
+                            <div class="settings-title">自動提取重點</div>
+                            <div>
+                                <label style="display:inline-flex;align-items:center;gap:6px;">
+                                    <input id="toggle-auto-highlights" type="checkbox">
+                                    開啟
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-icon" style="background:#8e8e93">拉</div>
+                            <div class="settings-title">下拉面板背景</div>
+                            <div>
+                                <select id="shade-bg-mode">
+                                    <option value="follow">跟隨桌布</option>
+                                    <option value="custom">自訂</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-item" id="shade-bg-custom-row" style="display:none;">
+                            <div class="settings-icon" style="background:#8e8e93">圖</div>
+                            <div class="settings-title">自訂背景 URL</div>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <input id="shade-bg-url" type="url" placeholder="https://..." style="width:200px;">
+                                <button id="save-shade-bg" class="action-button">儲存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            phone.appendChild(screen);
+
+            screen.addEventListener('click', (e) => {
+                const item = e.target.closest('.settings-item');
+                if (!item) return;
+                const target = item.dataset.target;
+                if (target && target.startsWith('_placeholder')) {
+                    alert('此設定頁面即將推出');
+                } else if (target) {
+                    showScreen(target);
+                }
+            });
+
+            const card = screen.querySelector('.settings-profile');
+            if (card) card.addEventListener('click', ()=> showScreen('profile-screen'));
+
+            // Initialize toggles
+            const autoDiary = document.getElementById('toggle-auto-diary');
+            const autoHighlights = document.getElementById('toggle-auto-highlights');
+            const modeSel = document.getElementById('shade-bg-mode');
+            const customRow = document.getElementById('shade-bg-custom-row');
+            const urlInput = document.getElementById('shade-bg-url');
+            const saveBtn = document.getElementById('save-shade-bg');
+
+            state.globalSettings.diaryAutoEnabled = state.globalSettings.diaryAutoEnabled !== false; // default true
+            state.globalSettings.diaryAutoHighlights = state.globalSettings.diaryAutoHighlights !== false; // default true
+            autoDiary.checked = !!state.globalSettings.diaryAutoEnabled;
+            autoHighlights.checked = !!state.globalSettings.diaryAutoHighlights;
+            modeSel.value = state.globalSettings.shadeBgMode || 'custom';
+            customRow.style.display = modeSel.value === 'custom' ? 'flex' : 'none';
+            urlInput.value = state.globalSettings.shadeWallpaper || '';
+
+            autoDiary.addEventListener('change', async ()=>{ state.globalSettings.diaryAutoEnabled = autoDiary.checked; await db.globalSettings.put(state.globalSettings); });
+            autoHighlights.addEventListener('change', async ()=>{ state.globalSettings.diaryAutoHighlights = autoHighlights.checked; await db.globalSettings.put(state.globalSettings); });
+            modeSel.addEventListener('change', async ()=>{ state.globalSettings.shadeBgMode = modeSel.value; customRow.style.display = modeSel.value==='custom' ? 'flex':'none'; await db.globalSettings.put(state.globalSettings); (window.refreshShadeBg||function(){})(); });
+            saveBtn.addEventListener('click', async ()=>{ state.globalSettings.shadeWallpaper = urlInput.value.trim(); await db.globalSettings.put(state.globalSettings); (window.refreshShadeBg||function(){})(); alert('已儲存下拉面板背景'); });
+        }
+
+        function injectSettingsAppIcon() {
+            const grid = document.getElementById('app-grid');
+            if (!grid || grid.querySelector('.app-icon.settings-entry')) return;
+            // 放到最後一行
+            let lastRow = [...grid.querySelectorAll('.app-row')].pop();
+            if (!lastRow) {
+                lastRow = document.createElement('div');
+                lastRow.className = 'app-row';
+                grid.appendChild(lastRow);
+            }
+            const icon = document.createElement('div');
+            icon.className = 'app-icon settings-entry';
+            icon.innerHTML = `<div class="icon-bg" style="font-size:28px;">⚙️</div><span class="label">設定</span>`;
+            icon.addEventListener('click', () => showScreen('settings-screen'));
+            lastRow.appendChild(icon);
+        }
+
+        // Minimal Shade injection with independent background option
+        function injectIOSShade(){
+            if (document.getElementById('ios-shade')) return;
+            const phone = document.getElementById('phone-screen');
+            const hot = document.createElement('div'); hot.id='ios-shade-hotzone'; phone.appendChild(hot);
+            const shade = document.createElement('div'); shade.id='ios-shade'; shade.setAttribute('aria-hidden','true');
+            shade.innerHTML = `
+              <div class="shade-backdrop"></div>
+              <div class="shade-panel">
+                <div class="shade-grabber"></div>
+                <div class="shade-clock">
+                  <div class="shade-time" id="shade-time">9:41</div>
+                  <div class="shade-date" id="shade-date">星期一</div>
+                </div>
+                <div class="shade-widgets">
+                  <div class="shade-widget"><div class="label">外觀</div><div class="value" id="appearance-value">淺色</div></div>
+                  <div class="shade-widget"><div class="label">勿擾</div><div class="value" id="dnd-value">關閉</div></div>
+                </div>
+              </div>`;
+            phone.appendChild(shade);
+
+            const panel = shade.querySelector('.shade-panel');
+            const backdrop = shade.querySelector('.shade-backdrop');
+            let dragging=false, startY=0,lastY=0, opened=false;
+            function setPull(px){ panel.style.setProperty('--pull', Math.max(0, px)+'px'); }
+            function openShade(v){ opened=!!v; shade.classList.toggle('open',opened); shade.setAttribute('aria-hidden', opened?'false':'true'); if(opened){ panel.style.transform='translateY(0)'; panel.style.removeProperty('--pull'); } else { panel.style.removeProperty('transform'); setPull(0);} }
+            function onStart(e){ const y=(e.touches?e.touches[0].clientY:e.clientY); dragging=true; startY=y; lastY=y; panel.style.transition='none'; shade.style.pointerEvents='auto'; }
+            function onMove(e){ if(!dragging) return; const y=(e.touches?e.touches[0].clientY:e.clientY); const dy=y-startY; lastY=y; if(!opened){ setPull(Math.max(0,dy)); } else { const up=Math.max(0,(startY-y)); panel.style.transform=`translateY(${up}px)`; } e.preventDefault(); }
+            function onEnd(){ if(!dragging) return; panel.style.transition=''; const dy=lastY-startY; if(!opened){ if(dy>90) openShade(true); else openShade(false);} else { const up=startY-lastY; if(up>70) openShade(false); else openShade(true);} dragging=false; }
+            hot.addEventListener('touchstart', onStart, {passive:false}); hot.addEventListener('pointerdown', onStart);
+            window.addEventListener('touchmove', onMove, {passive:false}); window.addEventListener('pointermove', onMove);
+            window.addEventListener('touchend', onEnd); window.addEventListener('pointerup', onEnd);
+            backdrop.addEventListener('click', ()=>openShade(false));
+
+            function refreshShadeBg(){
+                const mode = state.globalSettings.shadeBgMode || 'custom';
+                const url = state.globalSettings.shadeWallpaper || '';
+                if(mode==='follow'){
+                    const hs = document.getElementById('home-screen');
+                    const bg = window.getComputedStyle(hs).backgroundImage;
+                    panel.style.backgroundImage = bg.includes('url(') ? bg : 'none';
+                } else if (url){
+                    panel.style.backgroundImage = `url(${url})`;
+                    panel.style.backgroundSize = 'cover';
+                    panel.style.backgroundPosition = 'center';
+                } else {
+                    panel.style.backgroundImage = 'none';
+                }
+            }
+            refreshShadeBg();
+            window.refreshShadeBg = refreshShadeBg;
+        }
+
+        injectHomeDock();
+        injectSettingsScreen();
+        rebuildHomeGrid();
+        // injectSettingsAppIcon(); // grid 已包含「設定」，避免重複
+        injectIOSShade();
+
+        // Home app click delegation (robust to re-render)
+        const gridEl = document.getElementById('app-grid');
+        if (gridEl) {
+            gridEl.addEventListener('click', (e) => {
+                const icon = e.target.closest('.home-app');
+                if (!icon) return;
+                const key = icon.dataset.app;
+                const app = APP_REGISTRY[key];
+                if (app) showScreen(app.screen);
+            });
+        }
+
+        // Roles + Diary basic events
+        const addRoleBtn = document.getElementById('add-role-btn');
+        if (addRoleBtn) addRoleBtn.addEventListener('click', () => openRoleEditor());
+        const diaryRoleSelect = document.getElementById('diary-role-select');
+        if (diaryRoleSelect) diaryRoleSelect.addEventListener('change', async ()=>{ await renderDiaryScreen(); setTimeout(decorateDiaryUI,0); });
+        const addDiaryBtn = document.getElementById('add-diary-btn');
+        if (addDiaryBtn) addDiaryBtn.addEventListener('click', async ()=>{
+            const roles = await db.roleProfiles.toArray();
+            const options = roles.map(r=>`<option value=\"${r.id}\">${r.name}</option>`).join('');
+            const html = `<label>角色</label><select id=\"_dlg_role\">${options}</select>`;
+            const content = await showCustomPrompt('新增日記', '輸入內容', '', 'textarea', html);
+            if (content===null) return;
+            const rid = (document.getElementById('_dlg_role')||{}).value || '';
+            const diary = await addDiaryEntry({ roleId: rid||null, chatId: null, title:'', content: content||'', tags:['心情','重要','感情','工作'] });
+            if (state.globalSettings.diaryAutoHighlights) await extractHighlightsForText(diary.content, rid||null);
+            renderDiaryScreen();
+            setTimeout(decorateDiaryUI, 0);
+        });
+        const diaryScreenEl = document.getElementById('diary-screen');
+        if (diaryScreenEl) diaryScreenEl.addEventListener('click', async (e)=>{
+            const hlBtn = e.target.closest('[data-highlights]');
+            const delBtn = e.target.closest('[data-delete-diary]');
+            if (hlBtn){
+                const id = parseInt(hlBtn.dataset.highlights);
+                const d = await db.memories.get(id);
+                if (!d) return;
+                const rid = d.roleId || (await getRoleIdForChat(state.chats[state.activeChatId]||{}));
+                await extractHighlightsForText(d.content||'', rid||null, id);
+                alert('已提取重點');
+                return;
+            }
+            if (delBtn){
+                const id = parseInt(delBtn.dataset.deleteDiary);
+                const ok = await showCustomConfirm('刪除日記', '確定要刪除此日記嗎？', { confirmButtonClass:'btn-danger' });
+                if (!ok) return;
+                await db.memories.delete(id);
+                const delPoints = await db.memoryPoints.where('refType').equals('diary').toArray();
+                for (const p of delPoints){ if (p.refId === id) await db.memoryPoints.delete(p.id); }
+                renderDiaryScreen();
+                return;
+            }
+        });
+
+        const rolesScreenEl = document.getElementById('roles-screen');
+        if (rolesScreenEl) rolesScreenEl.addEventListener('click', async (e)=>{
+            const chatBtn = e.target.closest('[data-chat]');
+            const delBtn = e.target.closest('[data-delete]');
+            const editBtn = e.target.closest('[data-edit]');
+            if (chatBtn){ await createChatFromRole(chatBtn.dataset.chat); return; }
+            if (delBtn){ await deleteRole(delBtn.dataset.delete); return; }
+            if (editBtn){ openRoleEditor(editBtn.dataset.edit); return; }
+            const card = e.target.closest('.role-card');
+            if (card && card.dataset.roleId){ openMemoryTreeForRole(card.dataset.roleId); return; }
+        });
     });
+
+// ===== Helpers: Roles, Diary, Memory Context =====
+async function renderProfileScreen(){
+    try{
+        const nickInput = document.getElementById('profile-nickname');
+        const img = document.getElementById('profile-avatar-preview');
+        const fileBtn = document.getElementById('profile-avatar-upload-btn');
+        const file = document.getElementById('profile-avatar-file');
+        const save = document.getElementById('save-profile-btn');
+        const qs = state.qzoneSettings || { id:'main', nickname:'{{user}}', avatar:'' };
+        nickInput.value = qs.nickname || '';
+        img.src = qs.avatar || 'https://i.postimg.cc/hPdpVBz0/IMG-1372.jpg';
+        fileBtn.onclick = ()=> file.click();
+        file.onchange = () => {
+            const f = file.files?.[0]; if(!f) return; const reader = new FileReader(); reader.onload = e=>{ img.src = e.target.result; }; reader.readAsDataURL(f);
+        };
+        save.onclick = async ()=>{
+            state.qzoneSettings.nickname = nickInput.value.trim();
+            state.qzoneSettings.avatar = img.src;
+            await db.qzoneSettings.put(state.qzoneSettings);
+            alert('已儲存個人資料');
+            showScreen('settings-screen');
+        };
+    }catch(e){ console.warn('renderProfileScreen error', e); }
+}
+
+// Create chat from role
+async function createChatFromRole(roleId){
+    const role = await db.roleProfiles.get(roleId);
+    if (!role) { alert('角色不存在'); return; }
+    // reuse existing chat if any
+    const existing = Object.values(state.chats||{}).find(c => c.settings?.roleId === roleId);
+    if (existing) {
+        state.activeChatId = existing.id;
+        showScreen('chat-interface-screen');
+        const rci = window.renderChatInterface || window.renderChatInterfaceProxy;
+        if (typeof rci === 'function') rci(existing.id);
+        return;
+    }
+    const newChatId = 'chat_' + Date.now();
+    const newChat = {
+        id: newChatId,
+        name: role.name || '新角色',
+        isGroup: false,
+        relationship: { status: 'friend', blockedTimestamp: null, applicationReason: '' },
+        status: { text: '在線', lastUpdate: Date.now(), isBusy: false },
+        settings: {
+            roleId: roleId,
+            aiPersona: role.systemPrompt || '',
+            myPersona: '',
+            maxMemory: 10,
+            aiAvatar: role.avatar || (typeof defaultAvatar !== 'undefined' ? defaultAvatar : ''),
+            myAvatar: (typeof defaultAvatar !== 'undefined' ? defaultAvatar : ''),
+            background: '',
+            theme: 'default',
+            fontSize: 13,
+            customCss: '',
+            linkedWorldBookIds: [],
+            aiAvatarLibrary: []
+        },
+        history: [],
+        musicData: { totalTime: 0 }
+    };
+    state.chats[newChatId] = newChat;
+    await db.chats.put(newChat);
+    state.activeChatId = newChatId;
+    renderChatList();
+    showScreen('chat-interface-screen');
+    const rci = window.renderChatInterface || window.renderChatInterfaceProxy;
+    if (typeof rci === 'function') rci(newChatId);
+}
+
+// Delete role and cascade its diaries/memory points
+async function deleteRole(roleId){
+    const confirmFn = window.showCustomConfirm || window.showCustomConfirmProxy;
+    const ok = confirmFn ? await confirmFn('刪除角色', '確定要刪除此角色及其關聯日記與記憶點嗎？', { confirmButtonClass:'btn-danger' }) : (window.confirm('刪除角色\n確定要刪除此角色及其關聯日記與記憶點嗎？'));
+    if (!ok) return;
+    // remove related diaries and points
+    const diaries = await db.memories.where({ type:'diary', roleId }).toArray();
+    for (const d of diaries){ await db.memories.delete(d.id); }
+    const points = await db.memoryPoints.where('roleId').equals(roleId).toArray();
+    for (const p of points){ await db.memoryPoints.delete(p.id); }
+    await db.roleProfiles.delete(roleId);
+    // if any chat bound to this role, keep chat but unset roleId
+    for (const chatId in state.chats){
+        const chat = state.chats[chatId];
+        if (chat?.settings?.roleId === roleId) { chat.settings.roleId = null; await db.chats.put(chat); }
+    }
+    renderRolesScreen();
+}
+
+// Decorate diary UI with delete buttons (in case innerHTML is localized)
+function decorateDiaryUI(){
+    document.querySelectorAll('#diary-list .diary-card').forEach(card => {
+        if (card.querySelector('[data-delete-diary]')) return;
+        const hl = card.querySelector('[data-highlights]');
+        const actions = hl ? hl.parentElement : null;
+        if (actions){
+            const id = hl.getAttribute('data-highlights');
+            const del = document.createElement('button');
+            del.className = 'action-button btn-danger';
+            del.setAttribute('data-delete-diary', id);
+            del.textContent = '刪除';
+            actions.appendChild(del);
+        }
+    });
+}
+
+// Render Roles screen (basic list + add in header already wired)
+async function renderRolesScreen(){
+    try{
+        const list = document.getElementById('roles-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const roles = await (window.db?.roleProfiles?.toArray?.() || Promise.resolve([]));
+        if (!roles || roles.length === 0){
+            list.innerHTML = '<p style="color:#666; text-align:center; margin-top:20px;">尚未建立角色</p>';
+            return;
+        }
+        roles.forEach(r=>{
+            const card = document.createElement('div'); card.className='role-card'; card.dataset.roleId = r.id;
+            card.innerHTML = `<div style="display:flex;align-items:center;gap:10px;">
+                <img src="${r.avatar||'https://i.postimg.cc/hPdpVBz0/IMG-1372.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                <div style="flex:1;">
+                  <div style="font-weight:700;">${r.name}</div>
+                  <div class="role-meta">${(r.tags||[]).join(' / ')}</div>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <button class="action-button" data-chat="${r.id}">聊天</button>
+                  <button class="action-button" data-edit="${r.id}">編輯</button>
+                  <button class="action-button btn-danger" data-delete="${r.id}">刪除</button>
+                </div>
+              </div>`;
+            list.appendChild(card);
+            const chatBtn = card.querySelector('[data-chat]');
+            const editBtn = card.querySelector('[data-edit]');
+            const delBtn = card.querySelector('[data-delete]');
+            if (chatBtn) chatBtn.addEventListener('click', ()=> createChatFromRole(r.id));
+            if (editBtn) editBtn.addEventListener('click', ()=> openRoleEditor(r.id));
+            if (delBtn) delBtn.addEventListener('click', ()=> deleteRole(r.id));
+        });
+    }catch(e){ console.warn('renderRolesScreen error', e); }
+}
+
+// Render Diary screen (filter by role, list recent entries)
+async function renderDiaryScreen(){
+    try{
+        const roleSel = document.getElementById('diary-role-select');
+        const list = document.getElementById('diary-list');
+        if (!list) return;
+
+        // fill role selector if empty
+        if (roleSel && roleSel.options.length === 0){
+            const roles = await (window.db?.roleProfiles?.toArray?.() || Promise.resolve([]));
+            roleSel.innerHTML = '<option value="">全部角色</option>' + roles.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+        }
+
+        const rid = roleSel ? roleSel.value : '';
+        let diaries = [];
+        if (rid){
+            diaries = await window.db.memories.where({type:'diary', roleId: rid}).reverse().sortBy('timestamp');
+        } else {
+            // Dexie: for not-equals query fallback to filter client-side
+            diaries = await window.db.memories.where('type').equals('diary').toArray();
+        }
+        diaries.sort((a,b)=> (b.timestamp||0) - (a.timestamp||0));
+
+        list.innerHTML = '';
+        if (diaries.length === 0){
+            list.innerHTML = '<p style="color:#666; text-align:center; margin-top:20px;">尚無日記</p>';
+            return;
+        }
+        for (const d of diaries){
+            const role = d.roleId ? await window.db.roleProfiles.get(d.roleId) : null;
+            const dt = new Date(d.timestamp||Date.now());
+            const dStr = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+            const card = document.createElement('div'); card.className='diary-card';
+            card.innerHTML = `
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+                <div style="font-size:12px;color:#6b7280;">${dStr}</div>
+                <div style="font-weight:700;">${role?.name || '未指定角色'}</div>
+              </div>
+              <div style="margin-top:8px; white-space:pre-wrap;">${(d.title?`【${d.title}】\n`:'') + (d.content||'')}</div>
+              <div style="display:flex; gap:8px; margin-top:10px;">
+                <button class="action-button" data-highlights="${d.id}">提取重點</button>
+              </div>`;
+            list.appendChild(card);
+            // append delete button programmatically for robustness
+            const actions = card.querySelector('[data-highlights]')?.parentElement;
+            if (actions){
+                const del = document.createElement('button');
+                del.className = 'action-button btn-danger';
+                del.setAttribute('data-delete-diary', String(d.id));
+                del.textContent = '刪除';
+                actions.appendChild(del);
+            }
+        }
+    }catch(e){ console.warn('renderDiaryScreen error', e); }
+}
+async function getRoleIdForChat(chat){
+    try{
+        if (chat?.settings?.roleId) return chat.settings.roleId;
+        const found = await db.roleProfiles.where('name').equals(chat?.name||'').first();
+        return found?.id || null;
+    }catch(e){ return null; }
+}
+
+async function appendMemoryContextForChat(chat, messagesPayload){
+    try{
+        const roleId = await getRoleIdForChat(chat);
+        if (!roleId) return;
+        const points = await db.memoryPoints.where('roleId').equals(roleId).reverse().sortBy('timestamp');
+        const last3 = points.slice(-3).map(p=>p.text);
+        const diaries = await db.memories.where({roleId: roleId, type: 'diary'}).reverse().sortBy('timestamp');
+        const lastDiary = diaries.slice(-1)[0];
+        let ctx = '';
+        if (last3.length){ ctx += '\n\n# 角色記憶重點\n' + last3.map(t=>`- ${t}`).join('\n'); }
+        if (lastDiary){ const d=new Date(lastDiary.timestamp||Date.now()); const dStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; ctx += `\n\n# 最近日記節錄\n日期: ${dStr}\n${String(lastDiary.content).slice(0,500)}`; }
+        if (ctx){ messagesPayload.push({role:'system', content: ctx}); }
+    }catch(e){ console.warn('appendMemoryContextForChat error', e); }
+}
+
+async function addDiaryEntry({roleId, chatId, title, content, tags}){
+    const diary = { roleId: roleId||null, chatId: chatId||null, timestamp: Date.now(), type: 'diary', title: title||'', content: content||'', tags: tags||[], pinned: false };
+    const id = await db.memories.add(diary);
+    return {...diary, id};
+}
+
+async function extractHighlightsForText(text, roleId, refId){
+    const { proxyUrl, apiKey, model } = (state?.apiConfig || {});
+    if (proxyUrl && apiKey && model){
+        try{
+            const prompt = `請從以下日記摘錄出 2-5 條重點（繁體中文，條列式，簡短）：\n\n${text.substring(0,1800)}`;
+            const isGemini = proxyUrl === 'https://generativelanguage.googleapis.com/v1beta/models';
+            const data = isGemini ? toGeminiRequestData(model, apiKey, '', [{role:'user', content: prompt}], true) : null;
+            const res = await fetch(isGemini ? data.url : `${proxyUrl}/v1/chat/completions`, isGemini ? data.data : { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`}, body: JSON.stringify({ model, messages:[{role:'user',content:prompt}] }) });
+            const js = await res.json();
+            const out = isGemini ? js.candidates?.[0]?.content?.parts?.[0]?.text : js.choices?.[0]?.message?.content;
+            const lines = String(out||'').split(/\n/).map(s=>s.replace(/^[-•\*]\s?/, '').trim()).filter(Boolean).slice(0,5);
+            const now = Date.now();
+            for (const t of lines){ await db.memoryPoints.add({ roleId: roleId||null, timestamp: now, refType:'diary', refId: (refId||null), text: t, tags: ['重點'] }); }
+            return lines;
+        }catch(e){ console.warn('extractHighlightsForText API error', e); }
+    }
+    const lines = text.split(/[。！？!?.\n]/).map(s=>s.trim()).filter(Boolean).slice(0,3);
+    const now = Date.now();
+    for (const t of lines){ await db.memoryPoints.add({ roleId: roleId||null, timestamp: now, refType:'diary', refId:(refId||null), text: t, tags: ['重點'] }); }
+    return lines;
+}
+
+async function maybeAutoDiary(chatId){
+    try{
+        if (!state.globalSettings.diaryAutoEnabled) return;
+        const chat = state.chats[chatId]; if (!chat) return;
+        const roleId = await getRoleIdForChat(chat); if (!roleId) return;
+        if (Math.random() > 0.25) return;
+        const recent = chat.history.filter(m=>!m.isHidden).slice(-10).map(m=>`${m.role==='user'?'我':(m.senderName||chat.name)}: ${String(m.content||'').slice(0,60)}`).join('\n');
+        const full = `以下是最近的互動摘要，請以 ${chat.name} 的第一人稱寫一篇 80~160 字的日記（繁體中文、真實、自然）：\n\n${recent}`;
+        const { proxyUrl, apiKey, model } = (state?.apiConfig || {});
+        let content = '';
+        if (proxyUrl && apiKey && model){
+            const isGemini = proxyUrl === 'https://generativelanguage.googleapis.com/v1beta/models';
+            const data = isGemini ? toGeminiRequestData(model, apiKey, '', [{role:'user', content: full}], true) : null;
+            const res = await fetch(isGemini ? data.url : `${proxyUrl}/v1/chat/completions`, isGemini ? data.data : { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`}, body: JSON.stringify({ model, messages:[{role:'user',content:full}] }) });
+            const js = await res.json();
+            content = isGemini ? js.candidates?.[0]?.content?.parts?.[0]?.text : js.choices?.[0]?.message?.content;
+        }
+        if (!content) return;
+        const diary = await addDiaryEntry({ roleId, chatId, title:'', content, tags:['心情','重要','感情','工作'] });
+        if (state.globalSettings.diaryAutoHighlights) await extractHighlightsForText(content, roleId);
+    }catch(e){ console.warn('maybeAutoDiary error', e); }
+}
+// 角色編輯：打開/儲存/關閉
+try {
+  let editingRoleId = null;
+  window.openRoleEditor = async function(roleId){
+    editingRoleId = roleId || null;
+    const modal = document.getElementById('role-editor-modal');
+    if (!modal) return;
+    let title = document.getElementById('role-editor-title');
+    let nameInput = document.getElementById('role-name-input');
+    let avaPrev = document.getElementById('role-avatar-preview');
+    let persInput = document.getElementById('role-personality-input');
+    let toneInput = document.getElementById('role-tone-input');
+    let bioInput = document.getElementById('role-bio-input');
+    let sysInput = document.getElementById('role-system-input');
+    let taboosInput = document.getElementById('role-taboos-input');
+    let tagsInput = document.getElementById('role-tags-input');
+    if (!title || !nameInput || !avaPrev || !persInput || !toneInput || !bioInput || !sysInput || !taboosInput || !tagsInput) {
+      console.warn('role editor elements missing - rebuilding modal body');
+      const body = modal.querySelector('.modal-body');
+      body.innerHTML = `
+        <div class="form-group"><label for="role-name-input">名稱</label><input id="role-name-input" type="text" placeholder="角色名稱"></div>
+        <div class="form-group"><label>頭像</label>
+          <div class="avatar-upload">
+            <img id="role-avatar-preview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;background:#eee;">
+            <button id="role-avatar-upload-btn" type="button">上傳頭像</button>
+            <input id="role-avatar-file" type="file" accept="image/*" style="display:none;">
+          </div>
+        </div>
+        <div class="form-group"><label for="role-personality-input">性格</label><textarea id="role-personality-input" rows="3" placeholder="例: 溫柔、體貼、行動導向"></textarea></div>
+        <div class="form-group"><label for="role-tone-input">語氣</label><textarea id="role-tone-input" rows="2" placeholder="例: 使用可愛 Emoji、結尾加呢/呀"></textarea></div>
+        <div class="form-group"><label for="role-bio-input">個人資料</label><textarea id="role-bio-input" rows="3" placeholder="年齡、職業、興趣與背景"></textarea></div>
+        <div class="form-group"><label for="role-system-input">系統提示</label><textarea id="role-system-input" rows="4" placeholder="高優先級規則與口吻(對AI)"></textarea></div>
+        <div class="form-group"><label for="role-taboos-input">禁忌/避免事項</label><textarea id="role-taboos-input" rows="3" placeholder="不應觸及或避免的內容"></textarea></div>
+        <div class="form-group"><label for="role-tags-input">標籤(逗號分隔)</label><input id="role-tags-input" type="text" placeholder="例: 重要,感情"></div>
+      `;
+      // re-query
+      title = document.getElementById('role-editor-title');
+      nameInput = document.getElementById('role-name-input');
+      avaPrev = document.getElementById('role-avatar-preview');
+      persInput = document.getElementById('role-personality-input');
+      toneInput = document.getElementById('role-tone-input');
+      bioInput = document.getElementById('role-bio-input');
+      sysInput = document.getElementById('role-system-input');
+      taboosInput = document.getElementById('role-taboos-input');
+      tagsInput = document.getElementById('role-tags-input');
+      // rebind avatar upload button
+      const upBtn = document.getElementById('role-avatar-upload-btn');
+      const file = document.getElementById('role-avatar-file');
+      if (upBtn && file) {
+        upBtn.onclick = ()=> file.click();
+        file.onchange = (e)=>{ const f=e.target.files?.[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ avaPrev.src = ev.target.result; }; r.readAsDataURL(f); };
+      }
+    }
+    if (editingRoleId){
+      const r = await db.roleProfiles.get(editingRoleId);
+      title.textContent = '編輯角色';
+      nameInput.value = r?.name || '';
+      avaPrev.src = r?.avatar || 'https://i.postimg.cc/hPdpVBz0/IMG-1372.jpg';
+      persInput.value = r?.personality || '';
+      toneInput.value = r?.tone || '';
+      bioInput.value = r?.bio || '';
+      sysInput.value = r?.systemPrompt || '';
+      taboosInput.value = r?.taboos || '';
+      tagsInput.value = (r?.tags||[]).join(',');
+    } else {
+      title.textContent = '新建角色';
+      nameInput.value = '';
+      avaPrev.src = 'https://i.postimg.cc/hPdpVBz0/IMG-1372.jpg';
+      persInput.value = toneInput.value = bioInput.value = sysInput.value = taboosInput.value = tagsInput.value = '';
+    }
+    modal.classList.add('visible');
+  };
+  const roleAvaBtn = document.getElementById('role-avatar-upload-btn');
+  if (roleAvaBtn) roleAvaBtn.addEventListener('click', ()=> document.getElementById('role-avatar-file').click());
+  const roleAvaFile = document.getElementById('role-avatar-file');
+  if (roleAvaFile) roleAvaFile.addEventListener('change', (e)=>{ const f=e.target.files?.[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ document.getElementById('role-avatar-preview').src = ev.target.result; }; r.readAsDataURL(f); });
+  const cancelRoleBtn = document.getElementById('cancel-role-btn');
+  if (cancelRoleBtn) cancelRoleBtn.addEventListener('click', ()=> document.getElementById('role-editor-modal').classList.remove('visible'));
+  const saveRoleBtn = document.getElementById('save-role-btn');
+  if (saveRoleBtn) saveRoleBtn.addEventListener('click', async ()=>{
+    const now = Date.now();
+    const data = {
+      id: editingRoleId || ('role_'+now),
+      name: (document.getElementById('role-name-input').value||'').trim() || '未命名角色',
+      avatar: document.getElementById('role-avatar-preview').src,
+      personality: document.getElementById('role-personality-input').value.trim(),
+      tone: document.getElementById('role-tone-input').value.trim(),
+      bio: document.getElementById('role-bio-input').value.trim(),
+      systemPrompt: document.getElementById('role-system-input').value.trim(),
+      taboos: document.getElementById('role-taboos-input').value.trim(),
+      tags: (document.getElementById('role-tags-input').value||'').split(',').map(s=>s.trim()).filter(Boolean),
+      updatedAt: now
+    };
+    await db.roleProfiles.put(data);
+    document.getElementById('role-editor-modal').classList.remove('visible');
+    if (typeof renderRolesScreen === 'function') renderRolesScreen();
+  });
+} catch(e) { console.warn('role editor wiring failed', e); }
+
+// 動態為訊息動作面板加入「存入日記／存入記憶點」按鈕
+try {
+  const footer = document.querySelector('#message-actions-modal .custom-modal-footer');
+  if (footer && !document.getElementById('save-to-diary-btn')) {
+    const btn1 = document.createElement('button'); btn1.id = 'save-to-diary-btn'; btn1.textContent = '存入日記'; btn1.style.pointerEvents = 'auto'; footer.appendChild(btn1);
+    const btn2 = document.createElement('button'); btn2.id = 'save-to-memory-btn'; btn2.textContent = '存入記憶點'; btn2.style.pointerEvents = 'auto'; footer.appendChild(btn2);
+    const handleSaveDiary = async () => {
+        const ts = window.activeMessageTimestamp; if (!ts) return; const chat = window.state.chats[window.state.activeChatId]; const msg = chat.history.find(m=>m.timestamp===ts); if (!msg) return; hideMessageActions();
+        let roleId = await getRoleIdForChat(chat);
+        if (!roleId) {
+            const roles = await db.roleProfiles.toArray();
+            if (roles.length === 0) { alert('尚未建立角色'); return; }
+            const html = '<label>角色</label><select id="_pick_role">'+roles.map(r=>`<option value="${r.id}">${r.name}</option>`).join('')+'</select>';
+            await showCustomPrompt('選擇角色', '請從下拉選擇角色', '', 'text', html);
+            roleId = (document.getElementById('_pick_role')||{}).value || '';
+            if (!roleId) return;
+        }
+        const text = (typeof msg.content==='string') ? msg.content : JSON.stringify(msg.content);
+        const diary = await addDiaryEntry({ roleId, chatId: window.state.activeChatId, title:'', content: text, tags:['心情'] });
+        if (window.state.globalSettings.diaryAutoHighlights) await extractHighlightsForText(text, roleId, diary.id);
+        alert('已存入日記');
+    };
+    const handleSaveMemory = async () => {
+        const ts = window.activeMessageTimestamp; if (!ts) return; const chat = window.state.chats[window.state.activeChatId]; const msg = chat.history.find(m=>m.timestamp===ts); if (!msg) return; hideMessageActions();
+        let roleId = await getRoleIdForChat(chat);
+        if (!roleId) {
+            const roles = await db.roleProfiles.toArray();
+            if (roles.length === 0) { alert('尚未建立角色'); return; }
+            const html = '<label>角色</label><select id="_pick_role">'+roles.map(r=>`<option value="${r.id}">${r.name}</option>`).join('')+'</select>';
+            await showCustomPrompt('選擇角色', '請從下拉選擇角色', '', 'text', html);
+            roleId = (document.getElementById('_pick_role')||{}).value || '';
+            if (!roleId) return;
+        }
+        const text = (typeof msg.content==='string') ? msg.content : JSON.stringify(msg.content);
+        await db.memoryPoints.add({ roleId, timestamp: Date.now(), refType:'chat', refId: ts, text, tags:['重點'] });
+        alert('已存入記憶點');
+    };
+    btn1.addEventListener('click', handleSaveDiary, {capture:true});
+    btn2.addEventListener('click', handleSaveMemory, {capture:true});
+    // 內嵌備援，防止某些瀏覽器阻止 click 冒泡
+    btn1.setAttribute('onclick', 'void 0;'); btn2.setAttribute('onclick','void 0;');
+  }
+} catch (e) { console.warn('add diary/memory buttons failed', e); }
+
+// 事件委派：即便按鈕後續被重建也可點擊
+try {
+  const panel = document.getElementById('message-actions-modal');
+  if (panel) {
+    panel.addEventListener('click', async (e) => {
+      const dBtn = e.target.closest('#save-to-diary-btn');
+      const mBtn = e.target.closest('#save-to-memory-btn');
+      if (!dBtn && !mBtn) return;
+      const ts = window.activeMessageTimestamp; if (!ts) return; const chat = window.state.chats[window.state.activeChatId]; const msg = chat.history.find(m=>m.timestamp===ts); if (!msg) return; hideMessageActions();
+      let roleId = await getRoleIdForChat(chat);
+      if (!roleId) {
+        const roles = await db.roleProfiles.toArray();
+        if (roles.length === 0) { alert('尚未建立角色'); return; }
+        const html = '<label>角色</label><select id="_pick_role">'+roles.map(r=>`<option value="${r.id}">${r.name}</option>`).join('')+'</select>';
+        await showCustomPrompt('選擇角色', '請從下拉選擇角色', '', 'text', html);
+        roleId = (document.getElementById('_pick_role')||{}).value || '';
+        if (!roleId) return;
+      }
+      const text = (typeof msg.content==='string') ? msg.content : JSON.stringify(msg.content);
+      if (dBtn){
+        const diary = await addDiaryEntry({ roleId, chatId: window.state.activeChatId, title:'', content: text, tags:['心情'] });
+        if (window.state.globalSettings.diaryAutoHighlights) await extractHighlightsForText(text, roleId, diary.id);
+        alert('已存入日記');
+      } else if (mBtn){
+        await db.memoryPoints.add({ roleId, timestamp: Date.now(), refType:'chat', refId: ts, text, tags:['重點'] });
+        alert('已存入記憶點');
+      }
+    });
+  }
+} catch (e) { console.warn('delegate diary/memory click failed', e); }
+
+// Role colors + Memory Tree helpers and Diary coloring
+try {
+  if (!window.ROLE_COLORS) window.ROLE_COLORS = ['#4f46e5','#0ea5e9','#10b981','#f59e0b','#ef4444','#7c3aed','#ec4899','#14b8a6','#f97316','#22c55e'];
+  if (!window.ensureRoleColor) window.ensureRoleColor = async function(role){ if (!role) return '#999'; if (!role.color){ const pal = window.ROLE_COLORS; const key=(role.id||role.name||'x'); let h=0; for(let i=0;i<key.length;i++){ h=(h*31+key.charCodeAt(i))>>>0;} role.color = pal[h%pal.length]; try{ await db.roleProfiles.put(role);}catch(_){ } } return role.color; };
+  if (!window.openMemoryTreeForRole){
+    window.currentMemoryRoleId = null;
+    window.openMemoryTreeForRole = async function(roleId){ window.currentMemoryRoleId = roleId; const r = await db.roleProfiles.get(roleId); const t=document.getElementById('memory-tree-title'); if (t) t.textContent = (r?.name||'記憶樹'); await window.renderMemoryTree(); showScreen('memory-tree-screen'); };
+    window.renderMemoryTree = async function(){ const roleId = window.currentMemoryRoleId; const wrap=document.getElementById('memory-tree-content'); if (!wrap||!roleId) return; wrap.innerHTML=''; const pts = await db.memoryPoints.where('roleId').equals(roleId).toArray(); const cats=[{k:'person',t:'人物'},{k:'place',t:'地點'},{k:'event',t:'事件'},{k:'concept',t:'概念'},{k:'temp',t:'臨時'}]; const grouped={person:[],place:[],event:[],concept:[],temp:[]}; pts.forEach(p=>{ const k=(p.nodeType&&grouped[p.nodeType])?p.nodeType:'temp'; grouped[k].push(p); }); cats.forEach(c=>{ const sec=document.createElement('div'); sec.className='memory-section'; const hdr=document.createElement('div'); hdr.className='sec-header'; const count=grouped[c.k].length; hdr.innerHTML=`<span>${c.t}</span><span class="pill" style="background:#eef;color:#334">${count}</span>`; const body=document.createElement('div'); body.className='sec-body'; grouped[c.k].forEach(p=>{ const item=document.createElement('div'); item.className='memory-item'; item.dataset.id=p.id; item.innerHTML=`<div class="text">${p.text||''}</div><div class="ops"><select data-node><option value="person">人物</option><option value="place">地點</option><option value="event">事件</option><option value="concept">概念</option><option value="temp">臨時</option></select><button class="action-button" data-up>升級為世界書</button><button class="action-button btn-danger" data-del>刪除</button></div>`; item.querySelector('select[data-node]').value = p.nodeType||'temp'; body.appendChild(item); }); sec.appendChild(hdr); sec.appendChild(body); hdr.onclick=()=>{ body.style.display = (body.style.display==='none')?'':'none'; }; wrap.appendChild(sec); });
+      wrap.onclick = async (e)=>{ const row = e.target.closest('.memory-item'); if (!row) return; const id=parseInt(row.dataset.id); const mp = await db.memoryPoints.get(id); if (!mp) return; if (e.target.matches('[data-del]')) { const ok = await showCustomConfirm('刪除記憶點','確定刪除嗎？',{confirmButtonClass:'btn-danger'}); if (ok){ await db.memoryPoints.delete(id); row.remove(); } return; } if (e.target.matches('[data-up]')){ const name = await showCustomPrompt('升級為世界書','輸入條目名稱', (mp.text||'').slice(0,20)); if (!name) return; const wb={ id:'wb_'+Date.now(), name:name.trim(), categoryId:null }; await db.worldBooks.add(wb); mp.refType='worldbook'; mp.refId=wb.id; await db.memoryPoints.put(mp); alert('已升級為世界書'); return; } if (e.target.matches('select[data-node]')){ mp.nodeType = e.target.value; await db.memoryPoints.put(mp); } };
+    };
+  }
+  if (!window.decorateDiaryColors){ window.decorateDiaryColors = async function(){ try{ const listEl=document.getElementById('diary-list'); if (!listEl) return; const ridEl=document.getElementById('diary-role-select'); const rid=ridEl?ridEl.value:''; let diaries = rid? await db.memories.where({type:'diary', roleId:rid}).reverse().sortBy('timestamp'): await db.memories.where('type').equals('diary').toArray(); diaries.sort((a,b)=> (b.timestamp||0)-(a.timestamp||0)); const cards=listEl.querySelectorAll('.diary-card'); let i=0; for (const card of cards){ const d=diaries[i++]; if (!d) break; const role=d.roleId? await db.roleProfiles.get(d.roleId):null; const color= await window.ensureRoleColor(role); card.style.borderLeftColor=color; const header=card.firstElementChild; if (header){ const nameEl=header.lastElementChild; if (nameEl){ nameEl.className='role-tag'; nameEl.style.background=color; nameEl.style.color='#fff'; } } } }catch(e){ console.warn('decorateDiaryColors error', e);} }; }
+  try { const _rd = window.renderDiaryScreen || renderDiaryScreen; window.renderDiaryScreen = async function(){ await _rd(); await window.decorateDiaryColors(); }; } catch(_){ }
+} catch(_e) {}
+
+  // Hook: route ai_generated memories into Diary automatically
+  try {
+    if (!window.__memoriesAddHooked) {
+      window.__memoriesAddHooked = true;
+      const _origAdd = db.memories.add.bind(db.memories);
+      db.memories.add = async function(rec){
+        try {
+          if (rec && rec.type === 'ai_generated' && rec.description) {
+            const chat = (window.state && window.state.chats) ? window.state.chats[rec.chatId] : null;
+            let rid = null; try { rid = await getRoleIdForChat(chat); } catch(_){ rid = null; }
+            const content = String(rec.description||'').trim();
+            const diary = await addDiaryEntry({ roleId: rid || null, chatId: rec.chatId || null, title: '', content, tags: ['AI','memory'] });
+            if (window.state && window.state.globalSettings && window.state.globalSettings.diaryAutoHighlights) {
+              try { await extractHighlightsForText(content, rid || null, diary.id); } catch(_) {}
+            }
+            return diary.id;
+          }
+        } catch(e) { console.warn('db.memories.add hook failed; falling back', e); }
+        return _origAdd(rec);
+      };
+    }
+  } catch(_e) {}
+
 </script>
+<script>
+
+// === 工具面板：開/關 ===
+(function(){
+  const panel = document.getElementById('tools-panel');
+  const openBtn = document.getElementById('open-tools-panel-btn');
+  const closeBtn = document.getElementById('close-tools-panel-btn');
+  const doneBtn  = document.getElementById('done-tools-panel-btn');
+  if (openBtn && panel) openBtn.addEventListener('click', ()=> panel.classList.add('visible'));
+  if (closeBtn) closeBtn.addEventListener('click', ()=> panel.classList.remove('visible'));
+  if (doneBtn)  doneBtn.addEventListener('click',  ()=> panel.classList.remove('visible'));
+  // 點擊任何功能自動關閉抽屜（把事件綁在容器上）
+  const grid = panel ? panel.querySelector('.tools-grid') : null;
+  if (grid) grid.addEventListener('click', (e)=>{
+      const item = e.target.closest('.tool-item');
+      if (item) setTimeout(()=> panel.classList.remove('visible'), 120);
+  });
+})();
+
+// === 容錯：如果某些可選功能的按鈕不存在，就跳過綁定，避免報錯 ===
+(function(){
+  const safeBind = (id, type, handler) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(type, handler);
+  };
+  // 投票（可選）
+  safeBind('send-poll-btn', 'click', openCreatePollModal || (()=>{}));
+  safeBind('add-poll-option-btn', 'click', addPollOptionInput || (()=>{}));
+  safeBind('cancel-create-poll-btn', 'click', ()=>{
+      const m = document.getElementById('create-poll-modal'); 
+      if (m) m.classList.remove('visible');
+  });
+  safeBind('confirm-create-poll-btn', 'click', sendPoll || (()=>{}));
+  // 分享連結（可選）
+  safeBind('share-link-btn', 'click', openShareLinkModal || (()=>{}));
+  safeBind('cancel-share-link-btn', 'click', ()=>{
+      const m = document.getElementById('share-link-modal'); 
+      if (m) m.classList.remove('visible');
+  });
+  safeBind('confirm-share-link-btn', 'click', sendUserLinkShare || (()=>{}));
+  safeBind('browser-back-btn', 'click', ()=>{
+      showScreen && showScreen('chat-interface-screen');
+  });
+})();
+
+</script>
+
+<!-- === Recall preview patch START (non-destructive) === -->
+<style>
+/* === Recall preview patch CSS === */
+.recalled-message-placeholder {
+  position: relative;
+}
+.recalled-message-placeholder::after {
+  content: ' · 點一下查看原文';
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.recalled-message-placeholder.expanded::after {
+  content: ' · 點一下收起原文';
+}
+.recalled-original-view {
+  display: none;
+  margin: 6px auto 4px;
+  max-width: 86%;
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  padding: 8px;
+  opacity: 0.95;
+  pointer-events: none; /* 規避誤觸原文裡的交互 */
+  background: rgba(0,0,0,0.03);
+}
+#phone-screen.dark-mode .recalled-original-view {
+  background: rgba(255,255,255,0.06);
+}
+.recalled-original-view .message-bubble {
+  transform: scale(0.99);
+  opacity: 0.95;
+  margin: 2px auto 0;
+}
+.recalled-original-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 6px;
+}
+</style>
+
+<script>
+// === Recall preview patch JS ===
+(function () {
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, function(m){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+    });
+  }
+
+  function renderRecalledOriginalHTML(recalledMsg) {
+    const d = (recalledMsg && recalledMsg.recalledData) ? recalledMsg.recalledData : {};
+    let html = '<div class="recalled-original-note">撤回原文（僅你可見）</div>';
+    if (d.originalBubbleHtml) {
+      // 直接使用當時的氣泡快照
+      return html + d.originalBubbleHtml;
+    }
+    const t = d.originalType || 'text';
+    if (t === 'text') {
+      html += '<div class="message-bubble"><div class="content">' +
+              escapeHtml(d.originalContent || '') + '</div></div>';
+    } else {
+      let summary = '';
+      try { summary = escapeHtml(JSON.stringify(d.originalContent)); } catch (_) {}
+      html += '<div class="message-bubble system-bubble"><div class="content">[原類型: ' +
+              escapeHtml(t) + '] ' + summary + '</div></div>';
+    }
+    return html;
+  }
+
+  async function recallMessageV2(timestamp, isUserRecall) {
+    const chat = (window.state && window.state.chats) ? window.state.chats[window.state.activeChatId] : null;
+    if (!chat) return;
+    const idx = chat.history.findIndex(m => m.timestamp === timestamp);
+    if (idx === -1) return;
+    const original = chat.history[idx];
+
+    // 嘗試抓取 DOM 中的原氣泡 HTML 作為快照
+    let originalBubbleHtml = null;
+    try {
+      const bubble = document.querySelector('.message-bubble[data-timestamp="' + timestamp + '"]');
+      if (bubble) {
+        const clone = bubble.cloneNode(true);
+        // 清除可能衝突的屬性
+        (function strip(el){
+          try { el.removeAttribute('id'); } catch(_) {}
+          try { el.removeAttribute('data-timestamp'); } catch(_) {}
+          const kids = el.children || [];
+          for (let i=0;i<kids.length;i++) strip(kids[i]);
+        })(clone);
+        clone.classList.add('recalled-original-bubble');
+        originalBubbleHtml = clone.outerHTML;
+      }
+    } catch (e) { /* 忽略快照錯誤 */ }
+
+    const recalledData = {
+      originalType: original.type || 'text',
+      originalContent: original.content,
+      originalMeaning: original.meaning,
+      originalQuote: original.quote,
+      originalMessage: (function deepClone(o){ try{return JSON.parse(JSON.stringify(o));}catch(_){return null;} })(original),
+      originalBubbleHtml
+    };
+
+    // 轉為撤回消息
+    original.type = 'recalled_message';
+    original.content = isUserRecall ? '你撤回了一條訊息' : '對方撤回了一條訊息';
+    original.recalledData = recalledData;
+    delete original.meaning;
+    delete original.quote;
+
+    if (isUserRecall) {
+      chat.history.push({
+        role: 'system',
+        content: '[系統提示：用戶撤回了一條消息。你不知道內容是什麼，只需知道這個事件即可。]',
+        timestamp: Date.now(),
+        isHidden: true
+      });
+    }
+
+    if (window.db && window.db.chats && window.db.chats.put) { await window.db.chats.put(chat); }
+    if (window.renderChatInterface) window.renderChatInterface(window.state.activeChatId);
+    if (isUserRecall && window.renderChatList) window.renderChatList();
+  }
+
+  // 覆寫全域的 recallMessage
+  try { window.recallMessage = recallMessageV2; } catch (_) {}
+
+  // 以「捕獲階段」掛上點擊事件，優先於舊的事件監聽，並阻止其後的彈窗行為
+  function attachRevealHandler() {
+    const container = document.getElementById('chat-messages');
+    if (!container) return;
+    container.addEventListener('click', function(e){
+      const placeholder = e.target && e.target.closest ? e.target.closest('.recalled-message-placeholder') : null;
+      if (!placeholder) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      const wrapper = placeholder.closest('.message-wrapper');
+      const chat = (window.state && window.state.chats) ? window.state.chats[window.state.activeChatId] : null;
+      if (!wrapper || !chat) return;
+
+      const ts = parseInt(wrapper.dataset.timestamp, 10);
+      const recalledMsg = chat.history.find(m => m.timestamp === ts);
+      if (!recalledMsg || !recalledMsg.recalledData) return;
+
+      let preview = wrapper.querySelector('.recalled-original-view');
+      if (!preview) {
+        preview = document.createElement('div');
+        preview.className = 'recalled-original-view';
+        preview.innerHTML = renderRecalledOriginalHTML(recalledMsg);
+        // 插到占位氣泡之後
+        if (placeholder.nextSibling) {
+          placeholder.parentNode.insertBefore(preview, placeholder.nextSibling);
+        } else {
+          placeholder.parentNode.appendChild(preview);
+        }
+      }
+      const isOpen = placeholder.classList.toggle('expanded');
+      preview.style.display = isOpen ? 'block' : 'none';
+
+      // 更新提示文案（不中斷多語字串，保持原文用詞）
+      try {
+        const textBase = (recalledMsg.role === 'user') ? '你撤回了一條訊息' : '對方撤回了一條訊息';
+} catch (_) {}
+    }, true); // capture: true
+  }
+
+  // 嘗試立刻掛載；若失敗，稍後再試一次
+  try { attachRevealHandler(); } catch (_) {}
+  setTimeout(() => { try { attachRevealHandler(); } catch(_) {} }, 1000);
+})();
+</script>
+<!-- === Recall preview patch END === -->
+
 </body>
 </html>
